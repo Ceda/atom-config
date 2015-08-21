@@ -1,0 +1,29 @@
+"*":
+  "exception-reporting":
+    userId: "d4639621-c29c-7055-b810-95c7f825e71a"
+  welcome:
+    showOnStartup: false
+  core:
+    themes: [
+      "atom-dark-ui"
+      "monokai-syntax-for-one-dark"
+    ]
+    disabledPackages: [
+      "autocomplete-css"
+      "inline-autocomplete"
+    ]
+  editor:
+    invisibles: {}
+    showIndentGuide: true
+    fontSize: 13
+    fontFamily: "Monaco"
+  minimap: {}
+  pigments:
+    markerType: "dot"
+  "autocomplete-plus": {}
+  "atom-css-comb": {}
+  "inline-autocomplete": {}
+  "merge-conflicts": {}
+".slim.text":
+  editor:
+    showIndentGuide: true

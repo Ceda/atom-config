@@ -1,0 +1,41 @@
+{
+  "name": "duplicate-line-or-selection",
+  "main": "./lib/duplicate-line-or-selection",
+  "version": "0.5.0",
+  "description": "Sublime style duplication.",
+  "activationCommands": {
+    "atom-workspace": "duplicate-line-or-selection:duplicate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nick/duplicate-line-or-selection"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">=0.174.0 <2.0.0"
+  },
+  "dependencies": {},
+  "readme": "# Duplicate Line or Selection\n\nDuplicates the selection if there is one, otherwise, duplicates the line.\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/nick/duplicate-line-or-selection/issues"
+  },
+  "homepage": "https://github.com/nick/duplicate-line-or-selection",
+  "_id": "duplicate-line-or-selection@0.5.0",
+  "_shasum": "56d13482a1a92b64e017cf36f2eec522931bf0ad",
+  "_resolved": "file:../d-115713-4398-cviikl/package.tgz",
+  "_from": "../d-115713-4398-cviikl/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".coffee": [
+        "lib/duplicate-line-or-selection.coffee"
+      ],
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
+}
