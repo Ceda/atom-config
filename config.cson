@@ -1,0 +1,27 @@
+"*":
+  "exception-reporting":
+    userId: "1dfd30ba-d42c-404f-7651-0e7f151f914f"
+  welcome:
+    showOnStartup: false
+  core:
+    themes: [
+      "atom-dark-ui"
+      "monokai-flat"
+    ]
+    disabledPackages: [
+      "autocomplete-css"
+    ]
+  editor:
+    fontSize: 13
+    fontFamily: "Monaco"
+    invisibles: {}
+    useShadowDOM: true
+    showIndentGuide: true
+  "one-dark-ui": {}
+  pigments:
+    markerType: "dot"
+  "selection-highlight": {}
+  whitespace:
+    ignoreWhitespaceOnCurrentLine: false
+  minimap: {}
+  "recent-files-fuzzy-finder": {}
