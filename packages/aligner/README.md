@@ -10,6 +10,7 @@ Mac: `ctrl-cmd-/` Linux/Windows: `ctrl-alt-/`
 Package allows user to change the way characters are aligned.
 - Pad either left or right of character
 - If an extra whitespace should be added to the left and/or right of the character
+- Aligning trailing comments when aligning characters
 
 ##### Supported Languages
 - Javascript
@@ -38,35 +39,35 @@ random =
 For more information, visit [wiki](https://github.com/adrianlee44/atom-aligner/wiki/User-configurations)
 
 ### Supported character/operator
-- `=`: assignment
+`=`: assignment
 ```coffeescript
 foo   = "bar"
 test  = "notest"
 hello = "world"
 ```
-- `+=`, `-=` and other with `=`
+`+=`, `-=` and other with `=`
 ```coffeescript
 foo    = "bar"
 test  += "notest"
 hello -= "world"
 ```
-- `:`: Object
+`:`: Object
 ```coffeescript
 random =
   troll: "internet"
   foo:   "bar"
   bar:   "beer"
 ```
-- `,`: Items in arrays
+`,`: Items in arrays
 ```coffeescript
 ["helloText", 123456, "world"]
 ["foo"      ,  32124, "bar"]
 ```
+Comments (if `Align Comments` options on)
+```javascript
+var hello = 'world'; // line 1
+var foo   = 'bar';   // line 2
+```
 
 ## Changelog
-### v0.17.0 (2015-09-29)
-- Fix not handling activating and deactivating aligner properly
-  - Switch to using Disposal for listeners and registering addons
-  - Simplified provider manager
-
 Check [changelog](https://github.com/adrianlee44/atom-aligner/blob/master/CHANGELOG.md) for more information

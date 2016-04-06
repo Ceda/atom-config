@@ -3,6 +3,7 @@ helper          = require './helper'
 providerManager = require './provider-manager'
 formatter       = require './formatter'
 configs         = require '../config'
+extend          = require 'extend'
 {CompositeDisposable} = require 'atom'
 
 class Aligner
@@ -30,16 +31,16 @@ class Aligner
     character = helper.getAlignCharacter editor, row
     return unless character
 
-    {range, offset} = helper.getSameIndentationRange editor, row, character
-    formatter.formatRange editor, range, character, offset
+    {range, offsets, sectionizedLines} = helper.getSameIndentationRange editor, row, character
+    formatter.formatRange editor, range, character, offsets, sectionizedLines
 
   alignRanges: (editor, ranges) ->
     character = helper.getAlignCharacterInRanges editor, ranges
     return unless character
 
-    offsets = helper.getOffsets editor, character, ranges
-    for range in ranges
-      formatter.formatRange editor, range, character, offsets
+    {offsets, sectionizedLines} = helper.getOffsetsAndSectionizedLines editor, character, ranges
+    for range, rangeIndex in ranges
+      formatter.formatRange editor, range, character, offsets, sectionizedLines[rangeIndex]
 
   activate: ->
     @disposables = new CompositeDisposable
@@ -49,7 +50,12 @@ class Aligner
     @disposables.add atom.commands.add 'atom-text-editor', 'aligner:align', =>
       @align atom.workspace.getActiveTextEditor()
 
-    @disposables.add operatorConfig.add 'aligner', configs
+    alignerConfig = extend true, {}, configs
+    extend true, alignerConfig.config, atom.config.get('aligner')
+    @disposables.add operatorConfig.add 'aligner', alignerConfig
+
+    @disposables.add atom.config.observe 'aligner', (value) ->
+      operatorConfig.updateConfigWithAtom 'aligner', value
 
   deactivate: ->
     @disposables.dispose()

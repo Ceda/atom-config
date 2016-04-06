@@ -70,7 +70,9 @@ class ColorMarker
 
   isIgnored: -> @ignored
 
-  getScreenRange: -> @screenRangeCache ?= @marker.getScreenRange()
+  getBufferRange: -> @marker.getBufferRange()
+
+  getScreenRange: -> @screenRangeCache ?= @marker?.getScreenRange()
 
   invalidateScreenRangeCache: -> @screenRangeCache = null
 
@@ -88,3 +90,13 @@ class ColorMarker
     rgba = "rgba(#{Math.round @color.red}, #{Math.round @color.green}, #{Math.round @color.blue}, #{@color.alpha})"
 
     @marker.displayBuffer.buffer.setTextInRange(@marker.getBufferRange(), rgba)
+
+  convertContentToHSL: ->
+    hsl = "hsl(#{Math.round @color.hue}, #{Math.round @color.saturation}%, #{Math.round @color.lightness}%)"
+
+    @marker.displayBuffer.buffer.setTextInRange(@marker.getBufferRange(), hsl)
+
+  convertContentToHSLA: ->
+    hsla = "hsla(#{Math.round @color.hue}, #{Math.round @color.saturation}%, #{Math.round @color.lightness}%, #{@color.alpha})"
+
+    @marker.displayBuffer.buffer.setTextInRange(@marker.getBufferRange(), hsla)

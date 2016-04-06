@@ -1,4 +1,5 @@
 VariableScanner = require '../lib/variable-scanner'
+registry = require '../lib/variable-expressions'
 
 describe 'VariableScanner', ->
   [scanner, editor, text] = []
@@ -17,7 +18,7 @@ describe 'VariableScanner', ->
 
   withScannerForTextEditor = (fixture, block) ->
     withTextEditor fixture, ->
-      beforeEach -> scanner = new VariableScanner
+      beforeEach -> scanner = new VariableScanner({registry})
 
       afterEach -> scanner = null
 
@@ -128,4 +129,15 @@ describe 'VariableScanner', ->
         doSearch()
 
       it 'finds the variable with an interpolation tag', ->
+        expect(result).toBeDefined()
+
+    withScannerForTextEditor 'crlf.styl', ->
+      beforeEach ->
+        result = null
+        doSearch = -> result = scanner.search(text, result?.lastIndex)
+
+        doSearch()
+        doSearch()
+
+      it 'finds all the variables even with crlf mode', ->
         expect(result).toBeDefined()

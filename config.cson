@@ -1,27 +1,39 @@
 "*":
-  "exception-reporting":
-    userId: "1dfd30ba-d42c-404f-7651-0e7f151f914f"
-  welcome:
-    showOnStartup: false
   core:
-    themes: [
-      "atom-dark-ui"
-      "monokai-flat"
-    ]
     disabledPackages: [
       "autocomplete-css"
+      "linter-rubocop"
+      "language-slim"
+    ]
+    themes: [
+      "one-dark-ui"
+      "monokai-seti"
     ]
   editor:
-    fontSize: 13
+    autoIndentOnPaste: false
     fontFamily: "Monaco"
+    fontSize: 13
     invisibles: {}
     useShadowDOM: true
-    showIndentGuide: true
-  "one-dark-ui": {}
+  "exception-reporting":
+    userId: "1dfd30ba-d42c-404f-7651-0e7f151f914f"
+  "fuzzy-finder":
+    searchAllPanes: true
+    useAlternateScoring: true
+  linter:
+    errorPanelHeight: 64
+  "linter-rubocop": {}
+  minimap: {}
+  "one-dark-ui":
+    layoutMode: "Compact"
   pigments:
     markerType: "dot"
+  "recent-files-fuzzy-finder": {}
   "selection-highlight": {}
+  "tree-view":
+    hideIgnoredNames: true
+  welcome:
+    showOnStartup: false
   whitespace:
     ignoreWhitespaceOnCurrentLine: false
-  minimap: {}
-  "recent-files-fuzzy-finder": {}
+    removeTrailingWhitespace: true

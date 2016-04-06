@@ -1,5 +1,5 @@
-{Emitter, CompositeDisposable, Range} = require 'atom'
 minimatch = require 'minimatch'
+{Emitter, CompositeDisposable, Range} = require 'atom'
 
 {SERIALIZE_VERSION, SERIALIZE_MARKERS_VERSION} = require './versions'
 {THEME_VARIABLES} = require './uris'
@@ -85,8 +85,6 @@ compareArray = (a,b) ->
 
 module.exports =
 class ColorProject
-  atom.deserializers.add(this)
-
   @deserialize: (state) ->
     markersVersion = SERIALIZE_MARKERS_VERSION
     if state?.version isnt SERIALIZE_VERSION
@@ -105,11 +103,15 @@ class ColorProject
 
   constructor: (state={}) ->
     {
-      includeThemes, @ignoredNames, @sourceNames, @ignoredScopes, @paths, @searchNames, @ignoreGlobalSourceNames, @ignoreGlobalIgnoredNames, @ignoreGlobalIgnoredScopes, @ignoreGlobalSearchNames, variables, timestamp, buffers
+      includeThemes, @ignoredNames, @sourceNames, @ignoredScopes, @paths, @searchNames, @ignoreGlobalSourceNames, @ignoreGlobalIgnoredNames, @ignoreGlobalIgnoredScopes, @ignoreGlobalSearchNames, @ignoreGlobalSupportedFiletypes, @supportedFiletypes, variables, timestamp, buffers
     } = state
     @emitter = new Emitter
     @subscriptions = new CompositeDisposable
     @colorBuffersByEditorId = {}
+    @bufferStates = buffers ? {}
+
+    @variableExpressionsRegistry = require './variable-expressions'
+    @colorExpressionsRegistry = require './color-expressions'
 
     if variables?
       @variables = atom.deserializers.deserialize(variables)
@@ -125,7 +127,14 @@ class ColorProject
     @subscriptions.add atom.config.observe 'pigments.ignoredNames', =>
       @updatePaths()
 
+    @subscriptions.add atom.config.observe 'pigments.ignoredBufferNames', (@ignoredBufferNames) =>
+      @updateColorBuffers()
+
     @subscriptions.add atom.config.observe 'pigments.ignoredScopes', =>
+      @emitter.emit('did-change-ignored-scopes', @getIgnoredScopes())
+
+    @subscriptions.add atom.config.observe 'pigments.supportedFiletypes', =>
+      @updateIgnoredFiletypes()
       @emitter.emit('did-change-ignored-scopes', @getIgnoredScopes())
 
     @subscriptions.add atom.config.observe 'pigments.markerType', (type) ->
@@ -134,11 +143,28 @@ class ColorProject
     @subscriptions.add atom.config.observe 'pigments.ignoreVcsIgnoredPaths', =>
       @loadPathsAndVariables()
 
-    @bufferStates = buffers ? {}
+    svgColorExpression = @colorExpressionsRegistry.getExpression('pigments:named_colors')
+    defaultScopes = svgColorExpression.scopes.slice()
+    @subscriptions.add atom.config.observe 'pigments.extendedFiletypesForColorWords', (scopes) =>
+      svgColorExpression.scopes = defaultScopes.concat(scopes)
+      @colorExpressionsRegistry.emitter.emit 'did-update-expressions', {
+        name: svgColorExpression.name
+        registry: @colorExpressionsRegistry
+      }
+
+    @subscriptions.add @colorExpressionsRegistry.onDidUpdateExpressions ({name}) =>
+      return if not @paths? or name is 'pigments:variables'
+      @variables.evaluateVariables(@variables.getVariables())
+      colorBuffer.update() for id, colorBuffer of @colorBuffersByEditorId
+
+    @subscriptions.add @variableExpressionsRegistry.onDidUpdateExpressions =>
+      return unless @paths?
+      @reloadVariablesForPaths(@getPaths())
 
     @timestamp = new Date(Date.parse(timestamp)) if timestamp?
 
     @setIncludeThemes(includeThemes) if includeThemes
+    @updateIgnoredFiletypes()
 
     @initialize() if @paths? and @variables.length?
     @initializeBuffers()
@@ -157,6 +183,9 @@ class ColorProject
 
   onDidChangeIgnoredScopes: (callback) ->
     @emitter.on 'did-change-ignored-scopes', callback
+
+  onDidChangePaths: (callback) ->
+    @emitter.on 'did-change-paths', callback
 
   observeColorBuffers: (callback) ->
     callback(colorBuffer) for id,colorBuffer of @colorBuffersByEditorId
@@ -237,6 +266,8 @@ class ColorProject
       ignoredNames: @getIgnoredNames()
       context: @getContext()
 
+  setColorPickerAPI: (@colorPickerAPI) ->
+
   ##    ########  ##     ## ######## ######## ######## ########   ######
   ##    ##     ## ##     ## ##       ##       ##       ##     ## ##    ##
   ##    ##     ## ##     ## ##       ##       ##       ##     ## ##
@@ -245,12 +276,18 @@ class ColorProject
   ##    ##     ## ##     ## ##       ##       ##       ##    ##  ##    ##
   ##    ########   #######  ##       ##       ######## ##     ##  ######
 
-  initializeBuffers: (buffers) ->
+  initializeBuffers: ->
     @subscriptions.add atom.workspace.observeTextEditors (editor) =>
+      return if @isBufferIgnored(editor.getPath())
+
       buffer = @colorBufferForEditor(editor)
       if buffer?
         bufferElement = atom.views.getView(buffer)
         bufferElement.attach()
+
+  hasColorBufferForEditor: (editor) ->
+    return false if @destroyed or not editor?
+    @colorBuffersByEditorId[editor.id]?
 
   colorBufferForEditor: (editor) ->
     return if @destroyed
@@ -281,6 +318,31 @@ class ColorProject
     for id,colorBuffer of @colorBuffersByEditorId
       return colorBuffer if colorBuffer.editor.getPath() is path
 
+  updateColorBuffers: ->
+    for id, buffer of @colorBuffersByEditorId
+      if @isBufferIgnored(buffer.editor.getPath())
+        buffer.destroy()
+        delete @colorBuffersByEditorId[id]
+
+    try
+      if @colorBuffersByEditorId?
+        for editor in atom.workspace.getTextEditors()
+          continue if @hasColorBufferForEditor(editor) or @isBufferIgnored(editor.getPath())
+
+          buffer = @colorBufferForEditor(editor)
+          if buffer?
+            bufferElement = atom.views.getView(buffer)
+            bufferElement.attach()
+
+    catch e
+      console.log e
+
+  isBufferIgnored: (path) ->
+    path = atom.project.relativize(path)
+    sources = @ignoredBufferNames ? []
+    return true for source in sources when minimatch(path, source, matchBase: true, dot: true)
+    false
+
   ##    ########     ###    ######## ##     ##  ######
   ##    ##     ##   ## ##      ##    ##     ## ##    ##
   ##    ##     ##  ##   ##     ##    ##     ## ##
@@ -292,6 +354,8 @@ class ColorProject
   getPaths: -> @paths?.slice()
 
   appendPath: (path) -> @paths.push(path) if path?
+
+  hasPath: (path) -> path in (@paths ? [])
 
   loadPaths: (noKnownPaths=false) ->
     new Promise (resolve, reject) =>
@@ -326,6 +390,7 @@ class ColorProject
       @paths = @paths.filter (p) -> p not in removed
       @paths.push(p) for p in dirtied when p not in @paths
 
+      @emitter.emit 'did-change-paths', @getPaths()
       @reloadVariablesForPaths(dirtied)
 
   isVariablesSourcePath: (path) ->
@@ -356,11 +421,15 @@ class ColorProject
 
   getVariables: -> @variables.getVariables()
 
+  getVariableExpressionsRegistry: -> @variableExpressionsRegistry
+
   getVariableById: (id) -> @variables.getVariableById(id)
 
   getVariableByName: (name) -> @variables.getVariableByName(name)
 
   getColorVariables: -> @variables.getColorVariables()
+
+  getColorExpressionsRegistry: -> @colorExpressionsRegistry
 
   showVariableInFile: (variable) ->
     atom.workspace.open(variable.path).then (editor) ->
@@ -410,7 +479,7 @@ class ColorProject
     if paths.length is 1 and colorBuffer = @colorBufferForPath(paths[0])
       colorBuffer.scanBufferForVariables().then (results) -> callback(results)
     else
-      PathsScanner.startTask paths, (results) -> callback(results)
+      PathsScanner.startTask paths, @variableExpressionsRegistry, (results) -> callback(results)
 
   loadThemesVariables: ->
     iterator = 0
@@ -491,7 +560,8 @@ class ColorProject
       if /\/\*$/.test(p) then p + '*' else p
 
   setIgnoredNames: (@ignoredNames=[]) ->
-    return if not @initialized? and not @initializePromise?
+    if not @initialized? and not @initializePromise?
+      return Promise.reject('Project is not initialized yet')
 
     @initialize().then =>
       dirtied = @paths.filter (p) => @isIgnoredPath(p)
@@ -507,12 +577,41 @@ class ColorProject
     scopes = @ignoredScopes ? []
     unless @ignoreGlobalIgnoredScopes
       scopes = scopes.concat(atom.config.get('pigments.ignoredScopes') ? [])
+
+    scopes = scopes.concat(@ignoredFiletypes)
     scopes
 
   setIgnoredScopes: (@ignoredScopes=[]) ->
     @emitter.emit('did-change-ignored-scopes', @getIgnoredScopes())
 
   setIgnoreGlobalIgnoredScopes: (@ignoreGlobalIgnoredScopes) ->
+    @emitter.emit('did-change-ignored-scopes', @getIgnoredScopes())
+
+  setSupportedFiletypes: (@supportedFiletypes=[]) ->
+    @updateIgnoredFiletypes()
+    @emitter.emit('did-change-ignored-scopes', @getIgnoredScopes())
+
+  updateIgnoredFiletypes: ->
+    @ignoredFiletypes = @getIgnoredFiletypes()
+
+  getIgnoredFiletypes: ->
+    filetypes = @supportedFiletypes ? []
+
+    unless @ignoreGlobalSupportedFiletypes
+      filetypes = filetypes.concat(atom.config.get('pigments.supportedFiletypes') ? [])
+
+    filetypes = ['*'] if filetypes.length is 0
+
+    return [] if filetypes.some (type) -> type is '*'
+
+    scopes = filetypes.map (ext) ->
+      atom.grammars.selectGrammar("file.#{ext}")?.scopeName.replace(/\./g, '\\.')
+    .filter (scope) -> scope?
+
+    ["^(?!\\.(#{scopes.join('|')}))"]
+
+  setIgnoreGlobalSupportedFiletypes: (@ignoreGlobalSupportedFiletypes) ->
+    @updateIgnoredFiletypes()
     @emitter.emit('did-change-ignored-scopes', @getIgnoredScopes())
 
   themesIncluded: -> @includeThemes

@@ -73,3 +73,13 @@ atom-text-editor::shadow {
       transform: translateX(-50%) translateY(-50%)
   }
 }
+
+.indent-guide-improved {
+  background-color: gba(255, 255, 255, .1);
+  &.indent-guide-stack {
+    background-color: rgba(56, 173, 217, .2);
+    &.indent-guide-active {
+      background-color: rgba(255, 255, 255, .3);
+    }
+  }
+}

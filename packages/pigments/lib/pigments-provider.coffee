@@ -11,14 +11,19 @@ class PigmentsProvider
     @subscriptions.add atom.config.observe 'pigments.autocompleteScopes', (scopes) =>
       @selector = scopes.join(',')
     @subscriptions.add atom.config.observe 'pigments.extendAutocompleteToVariables', (@extendAutocompleteToVariables) =>
+    @subscriptions.add atom.config.observe 'pigments.extendAutocompleteToColorValue', (@extendAutocompleteToColorValue) =>
 
   dispose: ->
+    @disposed = true
     @subscriptions.dispose()
     @pigments = null
 
-  getProject: -> @pigments.getProject()
+  getProject: ->
+    return if @disposed
+    @pigments.getProject()
 
   getSuggestions: ({editor, bufferPosition}) ->
+    return if @disposed
     prefix = @getPrefix(editor, bufferPosition)
     project = @getProject()
     return unless prefix?.length
@@ -44,11 +49,15 @@ class PigmentsProvider
 
     matchedVariables = variables.filter (v) -> ///^#{_.escapeRegExp prefix}///.test v.name
 
-    matchedVariables.forEach (v) ->
+    matchedVariables.forEach (v) =>
       if v.isColor
+        color = if v.color.alpha == 1 then '#' + v.color.hex else v.color.toCSS();
+        rightLabelHTML = "<span class='color-suggestion-preview' style='background: #{v.color.toCSS()}'></span>"
+        rightLabelHTML = "#{color} #{rightLabelHTML}" if @extendAutocompleteToColorValue
+
         suggestions.push {
           text: v.name
-          rightLabelHTML: "<span class='color-suggestion-preview' style='background: #{v.color.toCSS()}'></span>"
+          rightLabelHTML
           replacementPrefix: prefix
           className: 'color-suggestion'
         }

@@ -1,3 +1,28 @@
+## v0.19.1 (2016-02-16)
+- Switch back to function instead of es2015 =>
+
+## v0.19.0 (2016-02-14)
+- Add align trailing comments feature
+
+## v0.18.1 (2016-01-31)
+- Fix tab getting converted to spaces when hiding invisibles
+
+## v0.18.0 (2016-01-29)
+- Minor performance optimization
+- Begin switching to ES2015 Javascript
+
+## v0.17.4 (2015-12-04)
+- Clean up operator config and make sure config is cleaned up properly on deactivation
+
+## v0.17.3 (2015-11-29)
+- Change throw to console error when re-registering an aligner add-on
+
+## v0.17.2 (2015-11-19)
+- Add `separator` as acceptable scope for `:`
+
+## v0.17.1 (2015-10-22)
+- Fix not using aligner user config
+
 ## v0.17.0 (2015-09-29)
 - Fix not handling activating and deactivating aligner properly
   - Switch to using Disposal for listeners and registering addons

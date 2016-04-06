@@ -43,9 +43,14 @@ class RegionRenderer
     regions
 
   createRegion: (start, end, colorMarker, screenLine) ->
+    textEditor = colorMarker.colorBuffer.editor
+    textEditorElement = atom.views.getView(textEditor)
     displayBuffer = colorMarker.marker.displayBuffer
-    lineHeight = displayBuffer.getLineHeightInPixels()
-    charWidth = displayBuffer.getDefaultCharWidth()
+
+    return unless textEditorElement.component?
+
+    lineHeight = textEditor.getLineHeightInPixels()
+    charWidth = textEditor.getDefaultCharWidth()
 
     clippedStart = {
       row: start.row
@@ -65,8 +70,8 @@ class RegionRenderer
 
     bufferRange.end.column++ if needAdjustment
 
-    startPosition = displayBuffer.pixelPositionForScreenPosition(clippedStart)
-    endPosition = displayBuffer.pixelPositionForScreenPosition(clippedEnd)
+    startPosition = textEditorElement.pixelPositionForScreenPosition(clippedStart)
+    endPosition = textEditorElement.pixelPositionForScreenPosition(clippedEnd)
 
     text = displayBuffer.buffer.getTextInRange(bufferRange)
 
@@ -79,11 +84,8 @@ class RegionRenderer
 
     region = document.createElement('div')
     region.className = 'region'
-
-    if @includeTextInRegion
-      region.textContent = text
-
-    for name, value of css
-      region.style[name] = value + 'px'
+    region.textContent = text if @includeTextInRegion
+    region.invalid = true if startPosition.left is endPosition.left
+    region.style[name] = value + 'px' for name, value of css
 
     region

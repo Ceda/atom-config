@@ -2,7 +2,7 @@ path = require 'path'
 Color = require '../lib/color'
 ColorMarker = require '../lib/color-marker'
 ColorMarkerElement = require '../lib/color-marker-element'
-{TextEditor} = require 'atom'
+{click} = require './helpers/events'
 
 stylesheetPath = path.resolve __dirname, '..', 'styles', 'pigments.less'
 stylesheet = atom.themes.loadStylesheet(stylesheetPath)
@@ -20,10 +20,10 @@ describe 'ColorMarkerElement', ->
 
     jasmineContent.appendChild(styleNode)
 
-    editor = new TextEditor({})
+    editor = atom.workspace.buildTextEditor({})
     editor.setText("""
     body {
-      color: red;
+      color: #f00;
       bar: foo;
       foo: bar;
     }
@@ -33,12 +33,25 @@ describe 'ColorMarkerElement', ->
       invalidate: 'touch'
     })
     color = new Color('#ff0000')
-    text = 'red'
+    text = '#f00'
 
-    colorMarker = new ColorMarker({marker, color, text})
+    colorMarker = new ColorMarker({
+      marker
+      color
+      text
+      colorBuffer: {
+        editor
+        selectColorMarkerAndOpenPicker: jasmine.createSpy('select-color')
+        ignoredScopes: []
+        getMarkerLayer: -> editor
+      }
+    })
 
   it 'releases itself when the marker is destroyed', ->
     colorMarkerElement = new ColorMarkerElement
+    colorMarkerElement.setContainer
+      requestMarkerUpdate: ([marker]) -> marker.render()
+
     colorMarkerElement.setModel(colorMarker)
 
     eventSpy = jasmine.createSpy('did-release')
@@ -49,6 +62,19 @@ describe 'ColorMarkerElement', ->
 
     expect(colorMarkerElement.release).toHaveBeenCalled()
     expect(eventSpy).toHaveBeenCalled()
+
+  describe 'clicking on the decoration', ->
+    beforeEach ->
+      colorMarkerElement = new ColorMarkerElement
+      colorMarkerElement.setContainer
+        requestMarkerUpdate: ([marker]) -> marker.render()
+
+      colorMarkerElement.setModel(colorMarker)
+
+      click(colorMarkerElement)
+
+    it 'calls selectColorMarkerAndOpenPicker on the buffer', ->
+      expect(colorMarker.colorBuffer.selectColorMarkerAndOpenPicker).toHaveBeenCalled()
 
   ##    ########     ###     ######  ##    ##
   ##    ##     ##   ## ##   ##    ## ##   ##
@@ -64,6 +90,9 @@ describe 'ColorMarkerElement', ->
       ColorMarkerElement.setMarkerType('background')
 
       colorMarkerElement = new ColorMarkerElement
+      colorMarkerElement.setContainer
+        requestMarkerUpdate: ([marker]) -> marker.render()
+
       colorMarkerElement.setModel(colorMarker)
 
       regions = colorMarkerElement.querySelectorAll('.region.background')
@@ -72,7 +101,7 @@ describe 'ColorMarkerElement', ->
       expect(regions.length).toEqual(4)
 
     it 'fills the region with the covered text', ->
-      expect(regions[0].textContent).toEqual('red;')
+      expect(regions[0].textContent).toEqual('#f00;')
       expect(regions[1].textContent).toEqual('  bar: foo;')
       expect(regions[2].textContent).toEqual('  foo: bar;')
       expect(regions[3].textContent).toEqual('}')
@@ -110,6 +139,9 @@ describe 'ColorMarkerElement', ->
       ColorMarkerElement.setMarkerType('outline')
 
       colorMarkerElement = new ColorMarkerElement
+      colorMarkerElement.setContainer
+        requestMarkerUpdate: ([marker]) -> marker.render()
+
       colorMarkerElement.setModel(colorMarker)
 
       regions = colorMarkerElement.querySelectorAll('.region.outline')
@@ -156,6 +188,9 @@ describe 'ColorMarkerElement', ->
       ColorMarkerElement.setMarkerType('underline')
 
       colorMarkerElement = new ColorMarkerElement
+      colorMarkerElement.setContainer
+        requestMarkerUpdate: ([marker]) -> marker.render()
+
       colorMarkerElement.setModel(colorMarker)
 
       regions = colorMarkerElement.querySelectorAll('.region.underline')
@@ -197,7 +232,7 @@ describe 'ColorMarkerElement', ->
   ##    ########   #######     ##
 
   describe 'when the render mode is set to dot', ->
-    [regions, markers, markersElements] = []
+    [regions, markers, markersElements, markerElement] = []
 
     createMarker = (range, color, text) ->
       marker = editor.markBufferRange(range, {
@@ -207,10 +242,22 @@ describe 'ColorMarkerElement', ->
       color = new Color(color)
       text = text
 
-      colorMarker = new ColorMarker({marker, color, text})
+      colorMarker = new ColorMarker({
+        marker
+        color
+        text
+        colorBuffer: {
+          editor
+          project:
+            colorPickerAPI:
+              open: jasmine.createSpy('color-picker.open')
+          ignoredScopes: []
+          getMarkerLayer: -> editor
+        }
+      })
 
     beforeEach ->
-      editor = new TextEditor({})
+      editor = atom.workspace.buildTextEditor({})
       editor.setText("""
       body {
         background: red, green, blue;
@@ -230,6 +277,9 @@ describe 'ColorMarkerElement', ->
 
       markersElements = markers.map (colorMarker) ->
         colorMarkerElement = new ColorMarkerElement
+        colorMarkerElement.setContainer
+          requestMarkerUpdate: ([marker]) -> marker.render()
+
         colorMarkerElement.setModel(colorMarker)
 
         jasmineContent.appendChild(colorMarkerElement)
@@ -258,10 +308,22 @@ describe 'ColorMarkerElement', ->
       color = new Color(color)
       text = text
 
-      colorMarker = new ColorMarker({marker, color, text})
+      colorMarker = new ColorMarker({
+        marker
+        color
+        text
+        colorBuffer: {
+          editor
+          project:
+            colorPickerAPI:
+              open: jasmine.createSpy('color-picker.open')
+          ignoredScopes: []
+          getMarkerLayer: -> editor
+        }
+      })
 
     beforeEach ->
-      editor = new TextEditor({})
+      editor = atom.workspace.buildTextEditor({})
       editor.setText("""
       body {
         background: red, green, blue;
@@ -281,6 +343,9 @@ describe 'ColorMarkerElement', ->
 
       markersElements = markers.map (colorMarker) ->
         colorMarkerElement = new ColorMarkerElement
+        colorMarkerElement.setContainer
+          requestMarkerUpdate: ([marker]) -> marker.render()
+
         colorMarkerElement.setModel(colorMarker)
 
         jasmineContent.appendChild(colorMarkerElement)

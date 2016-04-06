@@ -1,5 +1,5 @@
 {CompositeDisposable} = require 'atom'
-{SpacePenDSL, EventsDelegation} = require 'atom-utils'
+{SpacePenDSL, EventsDelegation, registerOrUpdateElement} = require 'atom-utils'
 
 capitalize = (s) -> s.replace /^./, (m) -> m.toUpperCase()
 
@@ -52,6 +52,7 @@ class ColorProjectElement extends HTMLElement
           themes = atom.themes.getActiveThemeNames()
           arrayField('sourceNames', 'Source Names')
           arrayField('ignoredNames', 'Ignored Names')
+          arrayField('supportedFiletypes', 'Supported Filetypes')
           arrayField('ignoredScopes', 'Ignored Scopes')
           arrayField('searchNames', 'Extended Search Names', 'pigments.extendedSearchNames')
 
@@ -75,11 +76,13 @@ class ColorProjectElement extends HTMLElement
     @initializeTextEditor('searchNames')
     @initializeTextEditor('ignoredNames')
     @initializeTextEditor('ignoredScopes')
+    @initializeTextEditor('supportedFiletypes')
     @initializeCheckbox('includeThemes')
     @initializeCheckbox('ignoreGlobalSourceNames')
     @initializeCheckbox('ignoreGlobalIgnoredNames')
     @initializeCheckbox('ignoreGlobalIgnoredScopes')
     @initializeCheckbox('ignoreGlobalSearchNames')
+    @initializeCheckbox('ignoreGlobalSupportedFiletypes')
 
   initializeTextEditor: (name) ->
     capitalizedName = capitalize name
@@ -105,10 +108,16 @@ class ColorProjectElement extends HTMLElement
 
   getIconName: -> "pigments"
 
-module.exports = ColorProjectElement =
-document.registerElement 'pigments-color-project', {
-  prototype: ColorProjectElement.prototype
-}
+  serialize: -> {deserializer: @constructor.name}
+
+module.exports =
+ColorProjectElement =
+registerOrUpdateElement 'pigments-color-project', ColorProjectElement.prototype
+
+ColorProjectElement.deserialize = (state) ->
+  element = new ColorProjectElement
+  element.setModel(atom.packages.getActivePackage('pigments').mainModule.getProject())
+  element
 
 ColorProjectElement.registerViewProvider = (modelClass) ->
   atom.views.addViewProvider modelClass, (model) ->
