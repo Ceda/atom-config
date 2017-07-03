@@ -8,4 +8,3 @@ through blocks of code.
 * `alt-shift-up` to travel and select up through blocks of code
 * `alt-shift-down` to travel and select down through blocks of code
 
-![](http://f.cl.ly/items/422j0z3O2l3G013f040o/block-travel.gif)

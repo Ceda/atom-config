@@ -1,6 +1,7 @@
 {pluralize, underscore} = require('inflection')
+_ = require 'underscore-plus'
 
-tableName = (modelClassName)->
+classToTableName = (modelClassName)->
   underscore(pluralize(modelClassName))
 
 normalizeSuperClass = (modelClassName) ->
@@ -10,14 +11,14 @@ normalizeSuperClass = (modelClassName) ->
     modelClassName
 
 class SchemaContent
-  constructor: (@modelClass, @modelSuperClass) ->
+  constructor: (@modelClass, @modelSuperClass, @tableName) ->
     @attributes = []
     @schemaFound = false
     @tableFound = false
     @tableScanned = false
-    @tableName = tableName(@modelClass)
+    @tableName ?= classToTableName(@modelClass)
     @modelSuperClass = normalizeSuperClass(@modelSuperClass)
-    @superTableName = tableName(@modelSuperClass) if @modelSuperClass
+    @superTableName = classToTableName(@modelSuperClass) if @modelSuperClass
 
   fill: (schemaContent) ->
     lines = schemaContent.toString().split(/\n/)
@@ -48,6 +49,12 @@ class SchemaContent
       columnRegexp: /\bt\.([a-zA-Z_]+)[\W]+"([a-zA-Z_]+)"[^\n]*/
       endRegexp: /^[\s]+end$/
     }
+
+  getAttributes: ->
+    if atom.config.get('rails-model-schema.sortByAlphabeticalOrder')
+      _.sortBy @attributes, (attr) -> attr.name
+    else
+      @attributes
 
   push: ({type, name, line})->
     @attributes.push(type: type, name: name, line: line)

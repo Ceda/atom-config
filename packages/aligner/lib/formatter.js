@@ -20,23 +20,25 @@ module.exports = {
    * @param {Object} sectionizedLines
   */
   formatRange: function (editor, range, character, offsets, sectionizedLines) {
-    let scope     = editor.getRootScopeDescriptor().getScopeChain();
-    let config    = operatorConfig.getConfig(character, scope);
+    let config    = operatorConfig.getConfig(character, editor);
     let lines     = [];
     let maxLength = 0;
 
     range.getRows().forEach(function(currentRow) {
       let currentLine = '';
       const tokenizedLine = helper.getTokenizedLineForBufferRow(editor, currentRow);
-      const lineCharacter = helper.getAlignCharacter(editor, currentRow);
-      const canAlignWith  = operatorConfig.canAlignWith(character, lineCharacter, config);
+      const lineCharacter = helper.getAlignCharacter(editor, currentRow, character, config);
+      const sectionizedLine = sectionizedLines[currentRow];
 
-      if (!lineCharacter || !canAlignWith || tokenizedLine.isComment()) {
-        lines.push(editor.lineTextForBufferRow(currentRow));
+      if (!sectionizedLine) return;
+
+      if (!lineCharacter || tokenizedLine.isComment()) {
+        sectionizedLine.sections.forEach((function(section) {
+          currentLine += section.before;
+        }));
+        lines.push(currentLine);
         return;
       }
-
-      const sectionizedLine = sectionizedLines[currentRow];
 
       sectionizedLine.sections.forEach(function(section, index) {
         const offset = section.offset + (sectionizedLine.hasPrefix() ? 1 : 0);
@@ -89,7 +91,8 @@ module.exports = {
       lines.forEach(function(line, index) {
         const sectionizedLine = sectionizedLines[range.start.row + index];
 
-        if (sectionizedLine.trailingComment) {
+        // sectionizedLine does not exist for comment only line
+        if (sectionizedLine && sectionizedLine.trailingComment) {
           lines[index] += this.buildWhitespaces(maxLength - line.length) + sectionizedLine.trailingComment;
         }
       }, this);

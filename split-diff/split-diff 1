@@ -1,0 +1,42 @@
+.overview-box
+
+  .overview-box-header.no-filter
+    .overview-box-heading
+      h2
+        span.glyphicon.glyphicon-flag
+        span.text = t '.list'
+    .overview-box-action
+      = link_to t('.create'), new_admin_reference_path,
+        class: 'btn btn-primary pull-right'
+
+  .overview-box-content
+    h2 = t('.top_reference')
+    table#sortable.references.table.table-overview.sortable(
+      data-url=update_row_order_admin_references_url
+    )
+      thead
+        tr
+          th
+          th = Reference.human_attribute_name :name
+          th = Reference.human_attribute_name :fields
+          th = Reference.human_attribute_name :published_at
+          th
+      tbody = render top_references.presence || 'empty'
+
+    h2 = t('.reference')
+    table.references.table.table-overview
+      thead
+        tr
+          th = Reference.human_attribute_name :name
+          th = Reference.human_attribute_name :fields
+          th = Reference.human_attribute_name :published_at
+          th
+      tbody = render references.presence || 'empty'
+
+    .paginator = paginate @references
+
+  .overview-box-footer
+    .overview-box-filter
+    .overview-box-action
+      = link_to t('.create'), new_admin_reference_path,
+        class: 'btn btn-primary pull-right'

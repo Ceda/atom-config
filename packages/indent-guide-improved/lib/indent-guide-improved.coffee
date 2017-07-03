@@ -3,7 +3,6 @@ _ = require 'lodash'
 
 {createElementsForGuides, styleGuide} = require './indent-guide-improved-element'
 {getGuides} = require './guides.coffee'
-RowMap = require './row-map.coffee'
 
 module.exports =
   activate: (state) ->
@@ -11,11 +10,6 @@ module.exports =
 
     # The original indent guides interfere with this package.
     atom.config.set('editor.showIndentGuide', false)
-
-    unless atom.config.get('editor.useShadowDOM')
-      msg = 'To use indent-guide-improved package, please check "Use Shadow DOM" in Settings.'
-      atom.notifications.addError(msg, {dismissable: true})
-      return
 
     updateGuide = (editor, editorElement) ->
       visibleScreenRange = editorElement.getVisibleRowRange()
@@ -30,7 +24,6 @@ module.exports =
           editor.indentationForBufferRow(row)
       scrollTop = editorElement.getScrollTop()
       scrollLeft = editorElement.getScrollLeft()
-      rowMap = new RowMap(editor.displayBuffer.rowMap.getRegions())
       guides = getGuides(
         visibleRange[0],
         visibleRange[1],
@@ -46,7 +39,6 @@ module.exports =
           g.stack,
           g.active,
           editor,
-          rowMap,
           basePixelPos,
           lineHeightPixel,
           visibleScreenRange[0],
@@ -58,9 +50,18 @@ module.exports =
       up = () ->
         updateGuide(editor, editorElement)
 
+      delayedUpdate = ->
+        setTimeout(up, 0)
+
       update = _.throttle(up , 30)
 
       subscriptions = new CompositeDisposable
+      subscriptions.add atom.workspace.onDidStopChangingActivePaneItem((item) ->
+        delayedUpdate() if item == editor
+      )
+      subscriptions.add atom.config.onDidChange('editor.fontSize', delayedUpdate)
+      subscriptions.add atom.config.onDidChange('editor.fontFamily', delayedUpdate)
+      subscriptions.add atom.config.onDidChange('editor.lineHeight', delayedUpdate)
       subscriptions.add editor.onDidChangeCursorPosition(update)
       subscriptions.add editorElement.onDidChangeScrollTop(update)
       subscriptions.add editorElement.onDidChangeScrollLeft(update)
@@ -75,6 +76,7 @@ module.exports =
       editorElement = atom.views.getView(editor)
       return unless editorElement?
       handleEvents(editor, editorElement)
+      updateGuide(editor, editorElement)
 
   deactivate: () ->
     @currentSubscriptions.forEach (s) ->

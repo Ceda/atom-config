@@ -1,6 +1,6 @@
 {
   "name": "block-travel",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "./lib/block-travel",
   "description": "Quickly travel up/down between blocks of code",
   "repository": {
@@ -11,16 +11,16 @@
   "engines": {
     "atom": ">=0.174.0 <2.0.0"
   },
-  "readme": "# Block travel package\n\nBlock travel uses empty lines to travel quickly\nthrough blocks of code.\n\n* `alt-up` to travel up through blocks of code\n* `alt-down` to travel down through blocks of code\n* `alt-shift-up` to travel and select up through blocks of code\n* `alt-shift-down` to travel and select down through blocks of code\n\n![](http://f.cl.ly/items/422j0z3O2l3G013f040o/block-travel.gif)\n",
+  "readme": "# Block travel package\n\nBlock travel uses empty lines to travel quickly\nthrough blocks of code.\n\n* `alt-up` to travel up through blocks of code\n* `alt-down` to travel down through blocks of code\n* `alt-shift-up` to travel and select up through blocks of code\n* `alt-shift-down` to travel and select down through blocks of code\n\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/leejarvis/block-travel/issues"
   },
   "homepage": "https://github.com/leejarvis/block-travel#readme",
-  "_id": "block-travel@1.0.4",
-  "_shasum": "fa45cd67408af7c4a3cc13516d9d052eb13aff01",
-  "_resolved": "file:../d-11614-13516-17ufpda/package.tgz",
-  "_from": "../d-11614-13516-17ufpda/package.tgz",
+  "_id": "block-travel@1.0.5",
+  "_shasum": "4c9a240512058198cffaec947eb75cefdc01c916",
+  "_resolved": "file:../d-11679-49439-kz52zr/package.tgz",
+  "_from": "../d-11679-49439-kz52zr/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

@@ -1,0 +1,61 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-11711-24493-1q0id54/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-11711-24493-1q0id54/package.tgz",
+        "spec": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-11711-24493-1q0id54/package.tgz",
+        "type": "local"
+      },
+      "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/apm-install-dir-11711-24493-dduq3d"
+    ]
+  ],
+  "_from": "../d-11711-24493-1q0id54/package.tgz",
+  "_id": "case-switch@2.2.4",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/case-switch",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-11711-24493-1q0id54/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-11711-24493-1q0id54/package.tgz",
+    "spec": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-11711-24493-1q0id54/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-11711-24493-1q0id54/package.tgz",
+  "_shasum": "f84be08258d50b41a144845ef5041888facc555e",
+  "_shrinkwrap": null,
+  "_spec": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-11711-24493-1q0id54/package.tgz",
+  "_where": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/apm-install-dir-11711-24493-dduq3d",
+  "activationCommands": {},
+  "bugs": {
+    "url": "https://github.com/andersennl/case-switch/issues"
+  },
+  "dependencies": {},
+  "description": "Atom editor package to change variable names from kebab- to snake_ to camelCase.",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">=0.174.0 <2.0.0"
+  },
+  "homepage": "https://github.com/andersennl/case-switch#readme",
+  "license": "MIT",
+  "main": "./lib/case-switch",
+  "name": "case-switch",
+  "optionalDependencies": {},
+  "readme": "# Case Switch package for Atom editor\n\nAtom editor package to change variable/method names from kebab- to snake- to camelCase and back again.\n\n# Functionality\nThere are two ways to convert your selected text.\n\n## Direct conversion\nBy using the methods below, you let Atom detect what type-case your currently selected text has. You just have to choose what case you want the text to be.\n\n* `alt-c ctrl-c` switches selected text to camelCase\n* `alt-c ctrl-s` switches selected text to snake_case\n* `alt-c ctrl-k` switches selected text to kebab-case\n\n## Toggling through cases\nEasily toggle through the cases for a selected text. This is probably the most useful command. *currently the text isn't selected anymore after switching - this will be fixed soon.*\n\n(Default: `alt-c ctrl-t` on OS X)\n\n# Roadmap\n* fix toggle function loosing selection\n\n# Contribution\nFeel free to open up a pull request or an issue to request a feature or to report a bug.\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andersennl/case-switch.git"
+  },
+  "version": "2.2.4"
+}

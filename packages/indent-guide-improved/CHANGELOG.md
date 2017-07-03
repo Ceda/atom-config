@@ -1,3 +1,33 @@
+## 1.4.12
+
+* Support Atom v1.13 #51
+
+## 1.4.11
+
+* Remove ShadowDOM check #50 (@davidwaynesimmons)
+
+## 1.4.10
+
+* Support Atom v1.11 #47 (@Zirro)
+
+## 1.4.9
+### Bugfix
+
+* Support Atom v1.9 #42 (@ra100)
+
+## 1.4.8
+
+* Fixed version inconsistency
+
+## 1.4.7
+
+* Failed release
+
+## 1.4.6
+### Bugfix
+
+* Fixed a bug #21 (@nebularg)
+
 ## 1.4.5
 ### Bugfix
 

@@ -1,0 +1,296 @@
+# Copyright 2016 Richard Slater
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"use strict"
+
+AtomRandom = require '../lib/random'
+
+describe "Random Data", ->
+  [workspaceElement, activationPromise, editor, changeHandler, chance] = []
+
+  dataTest = (dataType, expectValue) ->
+    runs ->
+      atom.commands.dispatch workspaceElement, "random:#{dataType}"
+
+    waitsFor ->
+      changeHandler.callCount > 0
+
+    runs ->
+      expect(editor.getText()).toEqual expectValue
+
+  beforeEach ->
+    waitsForPromise ->
+      atom.workspace.open()
+
+    runs ->
+      activationPromise = atom.packages.activatePackage("random")
+      atom.packages.getLoadedPackage('random').activateNow()
+
+    waitsForPromise ->
+      activationPromise
+
+    runs ->
+      editor = atom.workspace.getActiveTextEditor()
+      workspaceElement = atom.views.getView(atom.workspace)
+      changeHandler = jasmine.createSpy('changeHandler')
+      editor.onDidChange(changeHandler)
+      chance = atom.packages.getActivePackage('random').mainModule.chance
+
+  it "inserts random string", ->
+    spyOn(chance, 'string').andReturn('XuEFM!kalinXp')
+    dataTest 'string', 'XuEFM!kalinXp'
+  it "inserts random guid", ->
+    spyOn(chance, 'guid').andReturn('e48c5e7d-7ca3-5de5-a25d-c81389d65ed3')
+    dataTest 'guid', 'e48c5e7d-7ca3-5de5-a25d-c81389d65ed3'
+  it "inserts random integer", ->
+    spyOn(chance, 'integer').andReturn('123456789')
+    dataTest 'integer', '123456789'
+  it "inserts random boolean", ->
+    spyOn(chance, 'bool').andReturn('true')
+    dataTest 'boolean', 'true'
+  it "inserts random character", ->
+    spyOn(chance, 'character').andReturn('a')
+    dataTest 'character', 'a'
+  it "inserts random floating point number", ->
+    spyOn(chance, 'floating').andReturn('789.123')
+    dataTest 'floating', '789.123'
+  it "inserts random paragraph", ->
+    spyOn(chance, 'paragraph').andReturn(\
+    """Ducgin hugim rab omepamna wir cocvira isadu tu savsa seecga pesut uzreov
+    matuja dah ovatopgu insinzu lasuswog. Sat javkes vitpodpod esofuh ramliwe
+    doz ufo zegnuttuf udicav zaal pacam tetvethoh vobomo diuzpab. Gel isfa hin
+    set fe lumse ji ra fi vusgedma vej peb tuvej wates uligepceg pawelov jajop
+    rap. Vop enonunane ena lewi ho akebubam ni zaun fehip jum eju nuzja wez.""")
+    dataTest 'paragraph', \
+    """Ducgin hugim rab omepamna wir cocvira isadu tu savsa seecga pesut uzreov
+    matuja dah ovatopgu insinzu lasuswog. Sat javkes vitpodpod esofuh ramliwe
+    doz ufo zegnuttuf udicav zaal pacam tetvethoh vobomo diuzpab. Gel isfa hin
+    set fe lumse ji ra fi vusgedma vej peb tuvej wates uligepceg pawelov jajop
+    rap. Vop enonunane ena lewi ho akebubam ni zaun fehip jum eju nuzja wez."""
+  it "inserts random sentence", ->
+    spyOn(chance, 'sentence').andReturn('Ham ebumo gihcov panvofa ova dowved pibvafo jej go wiaj uza kegamsu elu mom vamac cukurewa katubole.')
+    dataTest 'sentence', 'Ham ebumo gihcov panvofa ova dowved pibvafo jej go wiaj uza kegamsu elu mom vamac cukurewa katubole.'
+  it "inserts random syllable", ->
+    spyOn(chance, 'syllable').andReturn('cos')
+    dataTest 'syllable', 'cos'
+  it "inserts random word", ->
+    spyOn(chance, 'word').andReturn('lavles')
+    dataTest 'word', 'lavles'
+  it "inserts random age", ->
+    spyOn(chance, 'age').andReturn('51')
+    dataTest 'age', '51'
+  it "inserts random birthday", ->
+    spyOn(chance, 'birthday').andReturn('Mon Jun 02 1975 04:29:41 GMT+0100 (GMT Summer Time)')
+    dataTest 'birthday', 'Mon Jun 02 1975 04:29:41 GMT+0100 (GMT Summer Time)'
+  it "inserts random first", ->
+    spyOn(chance, 'first').andReturn('Lucile')
+    dataTest 'firstname', 'Lucile'
+  it "inserts random last", ->
+    spyOn(chance, 'last').andReturn('Castro')
+    dataTest 'lastname', 'Castro'
+  it "inserts random gender", ->
+    spyOn(chance, 'gender').andReturn('Female')
+    dataTest 'gender', 'Female'
+  it "inserts random name", ->
+    spyOn(chance, 'name').andReturn('Ola McKenzie')
+    dataTest 'name', 'Ola McKenzie'
+  it "inserts random prefix", ->
+    spyOn(chance, 'prefix').andReturn('Miss')
+    dataTest 'prefix', 'Miss'
+  it "inserts random ssn", ->
+    spyOn(chance, 'ssn').andReturn('066-32-4255')
+    dataTest 'ssn', '066-32-4255'
+  it "inserts random suffix", ->
+    spyOn(chance, 'suffix').andReturn('Jr.')
+    dataTest 'suffix', 'Jr.'
+  it "inserts random android_id", ->
+    spyOn(chance, 'android_id').andReturn('APA91loebnEQiOc0QTE2bEQb3pQyWM7SIGUXgabBmROqhvDTyR078JXxW6FQBRWRDnk9tzV7GOp-QDGWDPwYqfWNJ-bMYiwbmU0nA_1-4-RVV3tFuYT6CZAy3_CNLbMX40tKsoCrMb10OskS_9i11wjhRwE33AFket90QYC1ofRk8om32Vw1zH8')
+    dataTest 'android_id', 'APA91loebnEQiOc0QTE2bEQb3pQyWM7SIGUXgabBmROqhvDTyR078JXxW6FQBRWRDnk9tzV7GOp-QDGWDPwYqfWNJ-bMYiwbmU0nA_1-4-RVV3tFuYT6CZAy3_CNLbMX40tKsoCrMb10OskS_9i11wjhRwE33AFket90QYC1ofRk8om32Vw1zH8'
+  it "inserts random apple_token", ->
+    spyOn(chance, 'apple_token').andReturn('9d8a442293a3d393c8eb72dd74bae6966c37e998bebfcf6da5cb5faa5829e766')
+    dataTest 'apple_token', '9d8a442293a3d393c8eb72dd74bae6966c37e998bebfcf6da5cb5faa5829e766'
+  it "inserts random bb_pin", ->
+    spyOn(chance, 'bb_pin').andReturn('5352a6ef')
+    dataTest 'bb_pin', '5352a6ef'
+  it "inserts random wp7_anid", ->
+    spyOn(chance, 'wp7_anid').andReturn('A=A3A1192DF99C5B79ACC76E28B5CD8950&E=23d&W=0')
+    dataTest 'wp7_anid', 'A=A3A1192DF99C5B79ACC76E28B5CD8950&E=23d&W=0'
+  it "inserts random wp8_anid2", ->
+    spyOn(chance, 'wp8_anid2').andReturn('ZWQ3YzNlODkzYmJhNThlNjFlZjUxMWZjZTE4OWRkYTc=')
+    dataTest 'wp8_anid2', 'ZWQ3YzNlODkzYmJhNThlNjFlZjUxMWZjZTE4OWRkYTc='
+  it "inserts random avatar", ->
+    spyOn(chance, 'avatar').andReturn('//www.gravatar.com/avatar/f958e39e591e12782462ff93e49c50ac')
+    dataTest 'avatar', '//www.gravatar.com/avatar/f958e39e591e12782462ff93e49c50ac'
+  it "inserts random color", ->
+    spyOn(chance, 'color').andReturn('rgb(75,163,43)')
+    dataTest 'color', 'rgb(75,163,43)'
+  it "inserts random domain", ->
+    spyOn(chance, 'domain').andReturn('sa.gov')
+    dataTest 'domain', 'sa.gov'
+  it "inserts random email", ->
+    spyOn(chance, 'email').andReturn('fuc@monwan.io')
+    dataTest 'email', 'fuc@monwan.io'
+  it "inserts random fbid", ->
+    spyOn(chance, 'fbid').andReturn('1000059066282306')
+    dataTest 'fbid', '1000059066282306'
+  it "inserts random google_analytics", ->
+    spyOn(chance, 'google_analytics').andReturn('UA-131570-79')
+    dataTest 'google_analytics', 'UA-131570-79'
+  it "inserts random hashtag", ->
+    spyOn(chance, 'hashtag').andReturn('#lile')
+    dataTest 'hashtag', '#lile'
+  it "inserts random ip", ->
+    spyOn(chance, 'ip').andReturn('49.241.35.71')
+    dataTest 'ip', '49.241.35.71'
+  it "inserts random ipv6", ->
+    spyOn(chance, 'ipv6').andReturn('9341:761d:3601:e9a9:cfcc:9f0c:a452:ffdd')
+    dataTest 'ipv6', '9341:761d:3601:e9a9:cfcc:9f0c:a452:ffdd'
+  it "inserts random klout", ->
+    spyOn(chance, 'klout').andReturn('57')
+    dataTest 'klout', '57'
+  it "inserts random tld", ->
+    spyOn(chance, 'tld').andReturn('net')
+    dataTest 'tld', 'net'
+  it "inserts random twitter", ->
+    spyOn(chance, 'twitter').andReturn('@asu')
+    dataTest 'twitter', '@asu'
+  it "inserts random url", ->
+    spyOn(chance, 'url').andReturn('http://sek.gov/hawvo')
+    dataTest 'url', 'http://sek.gov/hawvo'
+  it "inserts random address", ->
+    spyOn(chance, 'address').andReturn('1831 Daad Court')
+    dataTest 'address', '1831 Daad Court'
+  it "inserts random altitude", ->
+    spyOn(chance, 'altitude').andReturn('2884.88302')
+    dataTest 'altitude', '2884.88302'
+  it "inserts random areacode", ->
+    spyOn(chance, 'areacode').andReturn('(418)')
+    dataTest 'areacode', '(418)'
+  it "inserts random city", ->
+    spyOn(chance, 'city').andReturn('Lomkojana')
+    dataTest 'city', 'Lomkojana'
+  it "inserts random coordinates", ->
+    spyOn(chance, 'coordinates').andReturn('-80.64074, 129.12049')
+    dataTest 'coordinates', '-80.64074, 129.12049'
+  it "inserts random country", ->
+    spyOn(chance, 'country').andReturn('SC')
+    dataTest 'country', 'SC'
+  it "inserts random phone", ->
+    spyOn(chance, 'phone').andReturn('(906) 578-9097')
+    dataTest 'phone', '(906) 578-9097'
+  it "inserts random postal", ->
+    spyOn(chance, 'postal').andReturn('G7P 2I0')
+    dataTest 'postal', 'G7P 2I0'
+  it "inserts random province", ->
+    spyOn(chance, 'province').andReturn('PE')
+    dataTest 'province', 'PE'
+  it "inserts random state", ->
+    spyOn(chance, 'state').andReturn('DC')
+    dataTest 'state', 'DC'
+  it "inserts random street", ->
+    spyOn(chance, 'street').andReturn('Joza Grove')
+    dataTest 'street', 'Joza Grove'
+  it "inserts random zip", ->
+    spyOn(chance, 'zip').andReturn('22319')
+    dataTest 'zip', '22319'
+  it "inserts random date", ->
+    spyOn(chance, 'date').andReturn('Fri Jan 15 2106 08:06:14 GMT+0000 (GMT Standard Time)')
+    dataTest 'date', 'Fri Jan 15 2106 08:06:14 GMT+0000 (GMT Standard Time)'
+  it "inserts random iso date", ->
+    spyOn(chance, 'date').andReturn(new Date(Date.UTC(2016, 0, 15, 8, 6, 14)))
+    dataTest 'isodate', '2016-01-15T08:06:14.000Z'
+  it "inserts random hammertime", ->
+    spyOn(chance, 'hammertime').andReturn('2610322083978')
+    dataTest 'hammertime', '2610322083978'
+  it "inserts random month", ->
+    spyOn(chance, 'month').andReturn('February')
+    dataTest 'month', 'February'
+  it "inserts random year", ->
+    spyOn(chance, 'year').andReturn('2077')
+    dataTest 'year', '2077'
+  it "inserts random timestamp", ->
+    spyOn(chance, 'timestamp').andReturn('25272414')
+    dataTest 'timestamp', '25272414'
+  it "inserts random cc", ->
+    spyOn(chance, 'cc').andReturn('5610025702228204')
+    dataTest 'creditcard', '5610025702228204'
+  it "inserts random cc_type", ->
+    spyOn(chance, 'cc_type').andReturn('Solo')
+    dataTest 'cc_type', 'Solo'
+  it "inserts random currency", ->
+    spyOn(chance, 'currency').andReturn('[object Object]')
+    dataTest 'currency', '[object Object]'
+  it "inserts random currency_pair", ->
+    spyOn(chance, 'currency_pair').andReturn('[object Object],[object Object]')
+    dataTest 'currency_pair', '[object Object],[object Object]'
+  it "inserts random dollar", ->
+    spyOn(chance, 'dollar').andReturn('$8485.12')
+    dataTest 'dollar', '$8485.12'
+  it "inserts random exp", ->
+    spyOn(chance, 'exp').andReturn('03/2017')
+    dataTest 'exp', '03/2017'
+  it "inserts random exp_month", ->
+    spyOn(chance, 'exp_month').andReturn('05')
+    dataTest 'exp_month', '05'
+  it "inserts random exp_year", ->
+    spyOn(chance, 'exp_year').andReturn('2019')
+    dataTest 'exp_year', '2019'
+  it "inserts random d4", ->
+    spyOn(chance, 'd4').andReturn('1')
+    dataTest 'd4', '1'
+  it "inserts random d6", ->
+    spyOn(chance, 'd6').andReturn('4')
+    dataTest 'd6', '4'
+  it "inserts random d8", ->
+    spyOn(chance, 'd8').andReturn('3')
+    dataTest 'd8', '3'
+  it "inserts random d10", ->
+    spyOn(chance, 'd10').andReturn('7')
+    dataTest 'd10', '7'
+  it "inserts random d12", ->
+    spyOn(chance, 'd12').andReturn('9')
+    dataTest 'd12', '9'
+  it "inserts random d20", ->
+    spyOn(chance, 'd20').andReturn('19')
+    dataTest 'd20', '19'
+  it "inserts random d30", ->
+    spyOn(chance, 'd30').andReturn('23')
+    dataTest 'd30', '23'
+  it "inserts random d100", ->
+    spyOn(chance, 'd100').andReturn('27')
+    dataTest 'd100', '27'
+  it "inserts random normal", ->
+    spyOn(chance, 'normal').andReturn('-0.3289130431748269')
+    dataTest 'normal', '-0.3289130431748269'
+  it "inserts random radio", ->
+    spyOn(chance, 'radio').andReturn('WKNS')
+    dataTest 'radio', 'WKNS'
+  it "inserts random tv", ->
+    spyOn(chance, 'tv').andReturn('KICE')
+    dataTest 'tv', 'KICE'
+  it "inserts random longitude", ->
+    spyOn(chance, 'floating').andReturn('-49.273096')
+    dataTest 'longitude', '-49.273096'
+  it "inserts random latitude", ->
+    spyOn(chance, 'floating').andReturn('-85.954858')
+    dataTest 'latitude', '-85.954858'
+  it "inserts random 8 character password", ->
+    spyOn(chance, 'string').andReturn('r@nd0m')
+    dataTest '8-character-password', 'r@nd0m'
+  it "inserts random 10 character password", ->
+    spyOn(chance, 'string').andReturn('r@nd0m10')
+    dataTest '10-character-password', 'r@nd0m10'
+  it "inserts random 10 character password", ->
+    spyOn(chance, 'string').andReturn('r@nd0m20')
+    dataTest '20-character-password', 'r@nd0m20'

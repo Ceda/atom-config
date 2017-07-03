@@ -1,5 +1,5 @@
 GitTimeMachineView = require './git-time-machine-view'
-{TextEditor, CompositeDisposable} = require 'atom'
+{CompositeDisposable} = require 'atom'
 
 module.exports = GitTimeMachine =
   gitTimeMachineView: null
@@ -41,5 +41,6 @@ module.exports = GitTimeMachine =
 
   _onDidChangeActivePaneItem: (editor) ->
     editor = atom.workspace.getActiveTextEditor()
-    @gitTimeMachineView.setEditor(editor)
+    if @timelinePanel.isVisible()
+      @gitTimeMachineView.setEditor(editor)
     return

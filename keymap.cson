@@ -26,5 +26,17 @@
 # Atom Flight Manual:
 # https://atom.io/docs/latest/using-atom-basic-customization#cson
 
+'atom-text-editor:not([mini])':
+  'f5': 'sort-lines:natural'
+
 'atom-text-editor':
   'ctrl-cmd-}': 'aligner:align'
+
+'body':
+  'ctrl-tab ^ctrl': 'unset!'
+  'ctrl-tab': 'pane:show-next-item'
+  'ctrl-shift-tab ^ctrl': 'unset!'
+  'ctrl-shift-tab': 'pane:show-previous-item'
+
+# '.platform-darwin .editor':
+#     'cmd-d': 'editor:delete-line'

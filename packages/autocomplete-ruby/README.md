@@ -5,29 +5,33 @@
 Provides intelligent code completion for Ruby. Requires [RSense](https://github.com/rsense/rsense) and [Autocomplete+](https://github.com/atom-community/autocomplete-plus).
 
 ## Status
-Currently pre-alpha, buggy and not fully implemented. All help is welcome.
+Works for the most part, however **not on Windows**. This is due to a bug in [RSense](https://github.com/rsense/rsense), which is no longer being developed. Any bugs/issues related to rsense itself will need to be reported in that repo, and probably won't be fixed.
+
+Please read the [Known Issues](#known-issues) before reporting any issues.
 
 ## Why?
-Because I wanted Ruby code completion in Atom and [atom-rsense](https://github.com/rsense/atom-rsense) hasn't been updated since June 2014, which is a long time for an Atom package. It's currently broken and I didn't like the dependency on Opal, as much as I enjoy Ruby, so I decided to create this.
+Because I wanted Ruby code completion in Atom and [atom-rsense](https://github.com/rsense/atom-rsense) is broken and hasn't been updated since June 2014.
 
 ## Installation
-Install required gems and Atom packages:
+Make sure you have Java installed on your machine.
+
+Install rsense:
 ```shell
 $ gem install rsense
-$ apm install autocomplete-plus
 ```
+
+If you get an error about not being able to find `rsense` after opening a ruby file, you will need to set the path to the rsense binary in the plugin settings. The path is different depending on which OS/Ruby environment manager you are using. Executing `which rsense` or `gem environment` might help you locate it.
 
 ## Usage
-Launch the rsense server in the project root you want completion:
-```shell
-$ rsense start
-rsense version: 0.5.18
-logs at: /tmp/rsense.log
-process running at: 925
-```
+Just type some stuff, and autocomplete+ will automatically show you some suggestions.
 
-## Bugs
-A lot. If you're brave enough to try this out and notice any specifically, feel free to open an issue or even better submit a pull request.
+Note: If you use Winows, it might take about 10 seconds after the first suggestions pop up before rsense will give you any suggestions.
+
+## Known Issues
+- Sometimes the environment isn't configured correctly when launching Atom from it's launcher (any custom config in `.bashrc`, `.bash_profile`, etc.). If you have any issues with the plugin, please try launching atom from the terminal first: `$ atom`.
+- RSense doesn't appear to work on Windows.
+
+Feel free to report any other issues you encounter.
 
 ## Development
 Clone the repository into your working directory:

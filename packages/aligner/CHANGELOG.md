@@ -1,3 +1,41 @@
+## v1.2.2 (2017-06-14)
+- Prevent aligning when no editor is passing in (#69)
+
+## v1.2.1 (2017-05-26)
+- Fix aligning same character even when scope doesn't match
+
+## v1.2.0 (2017-05-18)
+- Fix not prompting to install depended packages
+
+## v1.1.0 (2017-05-17)
+- Use cursor scope instead of root scope for matching selector
+
+## v1.0.0 (2017-05-13)
+- Bump `extend` to v3.0.1
+- Update to use configSchema
+- Add aligner-javascript as dependency
+- Remove basic config.json
+
+## v0.22.3 (2016-12-05)
+- Fix formatter not aligning the correct character (#65)
+
+## v0.22.2 (2016-09-25)
+- Fix aligning trailing comment duplicates comments
+
+## v0.22.1 (2016-08-03)
+- Fix deprecated displayBuffer
+
+## v0.22.0 (2016-04-29)
+- Fix aligning comment only line throws TypeError
+- Add punctuation as : scope
+
+## v0.21.0 (2016-04-16)
+- Add support for whitespace as separator
+
+## v0.20.0 (2016-04-10)
+- Bump minimum Atom requirement to 1.6.0
+- Fully convert Aligner to JS
+
 ## v0.19.1 (2016-02-16)
 - Switch back to function instead of es2015 =>
 

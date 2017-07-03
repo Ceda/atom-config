@@ -1,26 +1,62 @@
 {
-  "name": "monokai-tweaked-ui",
-  "theme": "ui",
-  "version": "0.3.0",
+  "_args": [
+    [
+      {
+        "raw": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-117515-36493-6pg0ov.rhszmjwcdi/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-117515-36493-6pg0ov.rhszmjwcdi/package.tgz",
+        "spec": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-117515-36493-6pg0ov.rhszmjwcdi/package.tgz",
+        "type": "local"
+      },
+      "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/apm-install-dir-117515-36493-kteblu.5y96s6pqfr"
+    ]
+  ],
+  "_from": "../d-117515-36493-6pg0ov.rhszmjwcdi/package.tgz",
+  "_id": "monokai-tweaked-ui@0.3.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/monokai-tweaked-ui",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-117515-36493-6pg0ov.rhszmjwcdi/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-117515-36493-6pg0ov.rhszmjwcdi/package.tgz",
+    "spec": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-117515-36493-6pg0ov.rhszmjwcdi/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-117515-36493-6pg0ov.rhszmjwcdi/package.tgz",
+  "_shasum": "121d7cb2899226bf040a9df0080ef5bc9bba4c27",
+  "_shrinkwrap": null,
+  "_spec": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/d-117515-36493-6pg0ov.rhszmjwcdi/package.tgz",
+  "_where": "/private/var/folders/cx/bdbwl9q97p5d71xxz_b02nxw0000gn/T/apm-install-dir-117515-36493-kteblu.5y96s6pqfr",
+  "bugs": {
+    "url": "https://github.com/MoOx/atom-monokai-tweaked-ui/issues"
+  },
+  "dependencies": {},
   "description": "Monokai Tweaked UI theme for Atom",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">0.60.0"
+  },
+  "homepage": "https://github.com/MoOx/atom-monokai-tweaked-ui#readme",
+  "license": "MIT",
+  "name": "monokai-tweaked-ui",
+  "optionalDependencies": {},
+  "readme": "# Monokai Tweaked UI theme\n\n> Monokai Tweaked UI theme for Atom (based on Atom Dark UI).\n\nThis theme Monokai Tweaked UI theme can be installed and activated by going to the Themes section in the Settings view (cmd-,) and selecting it from the UI Themes dropdown menu.  \nYou can eventually install it using `apm install monokai-tweaked-ui`, but you will still need to activate it from the Setting view.\n\n_Note: This UI theme works great with [Monokai Tweaked Syntax theme](https://atom.io/packages/monokai-tweaked-syntax)_\n\n## Global preview\n\n![Monokai Tweaked UI theme preview](https://github.com/MoOx/atom-monokai-tweaked-ui/raw/master/screenshots/preview.png)\n",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MoOx/atom-monokai-tweaked-ui.git"
   },
-  "license": "MIT",
-  "engines": {
-    "atom": ">0.60.0"
-  },
-  "readme": "# Monokai Tweaked UI theme\n\n> Monokai Tweaked UI theme for Atom (based on Atom Dark UI).\n\nThis theme Monokai Tweaked UI theme can be installed and activated by going to the Themes section in the Settings view (cmd-,) and selecting it from the UI Themes dropdown menu.  \nYou can eventually install it using `apm install monokai-tweaked-ui`, but you will still need to activate it from the Setting view.\n\n_Note: This UI theme works great with [Monokai Tweaked Syntax theme](https://atom.io/packages/monokai-tweaked-syntax)_\n\n## Global preview\n\n![Monokai Tweaked UI theme preview](https://github.com/MoOx/atom-monokai-tweaked-ui/raw/master/screenshots/preview.png)\n",
-  "readmeFilename": "README.md",
-  "bugs": {
-    "url": "https://github.com/MoOx/atom-monokai-tweaked-ui/issues"
-  },
-  "homepage": "https://github.com/MoOx/atom-monokai-tweaked-ui#readme",
-  "_id": "monokai-tweaked-ui@0.3.0",
-  "_shasum": "0e8fb83948da70ae4ea97d4fd76cfd1e74994ee6",
-  "_resolved": "file:../d-115103-2704-zzxzmk/package.tgz",
-  "_from": "../d-115103-2704-zzxzmk/package.tgz",
+  "theme": "ui",
+  "version": "0.3.1",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

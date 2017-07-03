@@ -1,10 +1,29 @@
 "*":
+  "atom-beautify":
+    general:
+      _analyticsUserId: "43203fc4-3251-43ca-b49d-c1a5b2ca538b"
+  "atom-package-deps":
+    ignored: []
   core:
     disabledPackages: [
       "autocomplete-css"
-      "linter-rubocop"
-      "language-slim"
+      "minimap"
+      "rails-model-schema"
+      "slim-language"
+      "block-travel"
+      "autocomplete-css-with-stylus-support"
+      "autocomplete-ruby"
+      "emmet"
+      "git-time-machine"
+      "intentions"
+      "language-haml"
+      "language-vue"
+      "language-vue-component"
+      "merge-conflicts"
+      "rails-partials"
+      "vue-format"
     ]
+    telemetryConsent: "no"
     themes: [
       "one-dark-ui"
       "monokai-seti"
@@ -12,28 +31,44 @@
   editor:
     autoIndentOnPaste: false
     fontFamily: "Monaco"
-    fontSize: 13
     invisibles: {}
+    openEmptyEditorOnStart: false
     useShadowDOM: true
   "exception-reporting":
     userId: "1dfd30ba-d42c-404f-7651-0e7f151f914f"
   "fuzzy-finder":
     searchAllPanes: true
     useAlternateScoring: true
-  linter:
-    errorPanelHeight: 64
-  "linter-rubocop": {}
-  minimap: {}
-  "one-dark-ui":
-    layoutMode: "Compact"
+  "git-blame":
+    columnWidth: 355
+  "highlight-selected": {}
+  linter: {}
+  "linter-ui-default":
+    panelHeight: 69
+    showPanel: true
+  minimap:
+    displayCodeHighlights: false
+  "one-dark-ui": {}
   pigments:
     markerType: "dot"
-  "recent-files-fuzzy-finder": {}
-  "selection-highlight": {}
+  "ruby-block":
+    highlightLineNumber: true
+  "split-diff":
+    diffWords: true
+    ignoreWhitespace: true
+    leftEditorColor: "red"
+    rightEditorColor: "green"
+    syncHorizontalScroll: true
   "tree-view":
     hideIgnoredNames: true
   welcome:
     showOnStartup: false
   whitespace:
     ignoreWhitespaceOnCurrentLine: false
+    removeTrailingWhitespace: true
+".slim.source":
+  whitespace:
+    removeTrailingWhitespace: true
+".slim.text":
+  whitespace:
     removeTrailingWhitespace: true

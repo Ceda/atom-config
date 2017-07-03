@@ -1,0 +1,177 @@
+# Copyright 2016 Richard Slater
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"use strict"
+
+{CompositeDisposable} = require 'atom'
+{Chance} = require 'chance'
+
+module.exports = AtomRandom =
+  subscriptions: null
+  chance: null
+  commands: null
+  passwordChars: null
+
+  config:
+    charactersAllowedInPasswords:
+      type: 'string'
+      description: '''
+      The characters used in random passwords are restricted to these
+      characters, by default this excludes characters that are commonly mistaken
+      for other characters and keys that are hard to find on international or
+      mobile keyboards.
+      '''
+      default:
+        'abcdefghjkmnpqrtuvwxyzABCDEFGHJKMNPQRTUVWXYZ2346789!@#$%^&*-+=|?'
+
+  updatePasswordChars: (newValue) =>
+    console.log newValue
+    @passwordChars = newValue
+
+  activate: (state) ->
+    @chance = new Chance
+
+    # Events subscribed to in atom's system can be easily
+    # cleaned up with a CompositeDisposable
+    @subscriptions = new CompositeDisposable
+
+    @subscriptions.add atom.commands.add 'atom-workspace',
+      'random:reseed': => @reseed()
+
+    chance = @chance
+
+    @commands = {
+      'random:string': => @random(chance.string()),
+      'random:guid': => @random(chance.guid()),
+      'random:integer': => @random(chance.integer())
+      'random:boolean': => @random(chance.bool())
+      'random:character': => @random(chance.character())
+      'random:floating': => @random(chance.floating())
+      'random:natural': => @random(chance.natural())
+      'random:paragraph': => @random(chance.paragraph())
+      'random:sentence': => @random(chance.sentence())
+      'random:syllable': => @random(chance.syllable())
+      'random:word': => @random(chance.word())
+      'random:age': => @random(chance.age())
+      'random:birthday': => @random(chance.birthday())
+      'random:firstname': => @random(chance.first())
+      'random:lastname': => @random(chance.last())
+      'random:gender': => @random(chance.gender())
+      'random:name': => @random(chance.name())
+      'random:prefix': => @random(chance.prefix())
+      'random:ssn': => @random(chance.ssn())
+      'random:suffix': => @random(chance.suffix())
+      'random:android_id': => @random(chance.android_id())
+      'random:apple_token': => @random(chance.apple_token())
+      'random:bb_pin': => @random(chance.bb_pin())
+      'random:wp7_anid': => @random(chance.wp7_anid())
+      'random:wp8_anid2': => @random(chance.wp8_anid2())
+      'random:avatar': => @random(chance.avatar())
+      'random:color': => @random(chance.color())
+      'random:domain': => @random(chance.domain())
+      'random:email': => @random(chance.email())
+      'random:fbid': => @random(chance.fbid())
+      'random:google_analytics': => @random(chance.google_analytics())
+      'random:hashtag': => @random(chance.hashtag())
+      'random:ip': => @random(chance.ip())
+      'random:ipv6': => @random(chance.ipv6())
+      'random:klout': => @random(chance.klout())
+      'random:tld': => @random(chance.tld())
+      'random:twitter': => @random(chance.twitter())
+      'random:url': => @random(chance.url())
+      'random:address': => @random(chance.address())
+      'random:altitude': => @random(chance.altitude())
+      'random:areacode': => @random(chance.areacode())
+      'random:city': => @random(chance.city())
+      'random:coordinates': => @random(chance.coordinates())
+      'random:country': => @random(chance.country())
+      'random:phone': => @random(chance.phone())
+      'random:postal': => @random(chance.postal())
+      'random:province': => @random(chance.province())
+      'random:state': => @random(chance.state())
+      'random:street': => @random(chance.street())
+      'random:zip': => @random(chance.zip())
+      'random:date': => @random(chance.date())
+      'random:isodate': => @random(chance.date().toISOString())
+      'random:hammertime': => @random(chance.hammertime())
+      'random:month': => @random(chance.month())
+      'random:year': => @random(chance.year())
+      'random:timestamp': => @random(chance.timestamp())
+      'random:creditcard': => @random(chance.cc())
+      'random:cc_type': => @random(chance.cc_type())
+      'random:currency': => @random(chance.currency())
+      'random:currency_pair': => @random(chance.currency_pair())
+      'random:dollar': => @random(chance.dollar())
+      'random:exp': => @random(chance.exp())
+      'random:exp_month': => @random(chance.exp_month())
+      'random:exp_year': => @random(chance.exp_year())
+      'random:d4': => @random(chance.d4())
+      'random:d6': => @random(chance.d6())
+      'random:d8': => @random(chance.d8())
+      'random:d10': => @random(chance.d10())
+      'random:d12': => @random(chance.d12())
+      'random:d20': => @random(chance.d20())
+      'random:d30': => @random(chance.d30())
+      'random:d100': => @random(chance.d100())
+      'random:hash': => @random(chance.hash())
+      'random:normal': => @random(chance.normal())
+      'random:radio': => @random(chance.radio())
+      'random:tv': => @random(chance.tv())
+      'random:latitude': => @random(chance.floating({
+        min: -90, max: 90, fixed: 6 }))
+      'random:longitude': => @random(chance.floating({
+        min: -180, max: 180, fixed: 6 }))
+      'random:8-character-password': => @generatePassword(chance, 8, @random)
+      'random:10-character-password': => @generatePassword(chance, 10, @random)
+      'random:20-character-password': => @generatePassword(chance, 20, @random)
+      # additional commands go here
+    }
+
+    @subscriptions.add atom.commands.add 'atom-workspace', @commands
+
+    @subscriptions.add atom.config.observe(
+      'random.charactersAllowedInPasswords', @updatePasswordChars
+    )
+
+  deactivate: ->
+    @subscriptions.dispose()
+
+  serialize: ->
+
+  reseed: ->
+    parent = @
+    errorHandler = (error) ->
+      message = 'Error: unable to fetch seed from random.org: ' + error
+      atom.notifications.addError message
+
+    updateChance = (seed) ->
+      parent.chance = new Chance(seed)
+      atom.notifications.addSuccess 'Success: new seed is ' + seed
+
+    query = '?num=1&col=1&min=1&max=1000000000&base=10&format=plain&rnd=new'
+    fetch "https://random.org/integers/#{query}"
+      .then (response) ->
+        if response.status == 200
+          response.text().then updateChance
+        else
+          response.text().then errorHandler
+      .then null, errorHandler
+
+  random: (data) ->
+    if editor = atom.workspace.getActiveTextEditor()
+      editor.insertText(data.toString())
+
+  generatePassword: (chance, length, random) =>
+    password = chance.string { pool: @passwordChars, length: length }
+    random password
