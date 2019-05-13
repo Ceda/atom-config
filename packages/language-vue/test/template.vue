@@ -87,3 +87,21 @@ div id="footer"
   == partial('footer')
   | Copyright &copy; ${this.year} ${this.author}
 </template>
+
+<!--
+  Support text.haml
+  https://github.com/hedefalk/atom-vue/issues/87
+-->
+
+<template lang="haml">
+%p
+  {{ greeting }} world!
+</template>
+
+<!--
+  Use source.js.jsx over source.js in vue-template-expression
+-->
+
+<template>
+  <h3 class="method">{{$method_text this.hello()}}</h3>
+</template>

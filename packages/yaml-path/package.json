@@ -1,0 +1,77 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/d-118717-43257-h4uif8.ygiy41v2t9/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/d-118717-43257-h4uif8.ygiy41v2t9/package.tgz",
+        "spec": "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/d-118717-43257-h4uif8.ygiy41v2t9/package.tgz",
+        "type": "local"
+      },
+      "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/apm-install-dir-118717-43257-r77kpo.c6yefm9529"
+    ]
+  ],
+  "_from": "../d-118717-43257-h4uif8.ygiy41v2t9/package.tgz",
+  "_id": "yaml-path@0.1.1",
+  "_inCache": true,
+  "_location": "/yaml-path",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/d-118717-43257-h4uif8.ygiy41v2t9/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/d-118717-43257-h4uif8.ygiy41v2t9/package.tgz",
+    "spec": "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/d-118717-43257-h4uif8.ygiy41v2t9/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-118717-43257-h4uif8.ygiy41v2t9/package.tgz",
+  "_shasum": "ff2eb08544d4df23af2247e5457cfd3613c4b23f",
+  "_shrinkwrap": null,
+  "_spec": "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/d-118717-43257-h4uif8.ygiy41v2t9/package.tgz",
+  "_where": "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/apm-install-dir-118717-43257-r77kpo.c6yefm9529",
+  "bugs": {
+    "url": "https://github.com/smarmie/yaml-path/issues"
+  },
+  "consumedServices": {
+    "status-bar": {
+      "versions": {
+        "^1.0.0": "consumeStatusBar"
+      }
+    },
+    "linter-plus-self": {
+      "versions": {
+        "0.1.0": "consumeLinter"
+      }
+    }
+  },
+  "dependencies": {
+    "atom-linter": "^3.2.0"
+  },
+  "description": "Show current position in YAML",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "homepage": "https://github.com/smarmie/yaml-path#readme",
+  "keywords": [
+    "yaml",
+    "statusbar"
+  ],
+  "license": "MIT",
+  "main": "./lib/yaml-path",
+  "name": "yaml-path",
+  "optionalDependencies": {},
+  "readme": "When editing long/wide YAML files, you can use this to see the YAML namespace that you are currently in.\nIt only works when the grammar is YAML and refreshes every 100ms.\n\nActivate with CTRL+ALT+Y\n\nDisclaimer: I had no idea what I was doing when I was writing this, it's the first time I ever saw CoffeeScript/JavaScript. So any bugs/features might get ignored. Shameless rip of the status-bar-clock package.\n\nTODO: subscribe to event, such as grammar change or cursor move.\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smarmie/yaml-path.git"
+  },
+  "version": "0.1.1"
+}

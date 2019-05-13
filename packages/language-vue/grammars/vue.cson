@@ -377,6 +377,35 @@ patterns: [
     ]
   }
   {
+   name: "source.haml.embedded.html"
+   begin: "(?:^\\s+)?(<)((?i:template))\\b(?=[^>]*lang=[\"']haml[\"'])"
+   end: "(</)((?i:template))(>)(?:\\s*\\n)?"
+   captures:
+     "1":
+       name: "punctuation.definition.tag.html"
+     "2":
+       name: "entity.name.tag.style.html"
+     "3":
+       name: "punctuation.definition.tag.html"
+   patterns: [
+     {
+       include: "#tag-stuff"
+     }
+     {
+       begin: "(>)"
+       beginCaptures:
+         "1":
+           name: "punctuation.definition.tag.html"
+       end: "(?=</(?i:template))"
+       patterns: [
+         {
+           include: "text.haml"
+         }
+       ]
+     }
+   ]
+  }
+  {
     name: "text.slm.embedded.html"
     begin: "(?:^\\s+)?(<)((?i:template))\\b(?=[^>]*lang=[\"']slm[\"'])"
     end: "(</)((?i:template))(>)(?:\\s*\\n)?"
@@ -658,7 +687,7 @@ repository:
     ]
   "vue-directive":
     name: "meta.directive.vue"
-    begin: "(?:\\b(v-)|(:|@))([a-zA-Z][0-9a-zA-Z\\-\\:\\.]+)\\s*(=)"
+    begin: "(?:\\b(v-)|(:|@))([a-zA-Z][0-9a-zA-Z\\-\\:\\._]+)\\s*(=)"
     end: "(?<='|\")"
     captures:
       "1":
@@ -714,6 +743,9 @@ repository:
         name: "meta.brace.curly.js"
     patterns: [
       {
+        include: "source.js.jsx"
+      },
+      {
         include: "source.js"
       }
     ]
@@ -727,6 +759,9 @@ repository:
       "0":
         name: "meta.brace.curly.js"
     patterns: [
+      {
+        include: "source.js.jsx"
+      },
       {
         include: "source.js"
       }
@@ -769,7 +804,7 @@ repository:
     ]
   "tag-generic-attribute":
     name: "entity.other.attribute-name.html"
-    match: "\\b([a-zA-Z\\-:]+)"
+    match: "\\b([a-zA-Z\\-:_]+)"
   "tag-id-attribute":
     name: "meta.attribute-with-value.id.html"
     begin: "\\b(id)\\b\\s*(=)"

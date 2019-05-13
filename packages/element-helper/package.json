@@ -1,0 +1,60 @@
+{
+  "_from": "https://www.atom.io/api/packages/element-helper/versions/0.5.4/tarball",
+  "_id": "element-helper@0.5.4",
+  "_inBundle": false,
+  "_integrity": "sha512-Bg086otD57QqvoNyFXwp+BqEhy74t+bp6zMOWaND+BMv3lW6nvK+1ynrV+41GeE/Z2eVJBuS6lv0n/7JcvvnAA==",
+  "_location": "/element-helper",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "remote",
+    "raw": "https://www.atom.io/api/packages/element-helper/versions/0.5.4/tarball",
+    "rawSpec": "https://www.atom.io/api/packages/element-helper/versions/0.5.4/tarball",
+    "saveSpec": "https://www.atom.io/api/packages/element-helper/versions/0.5.4/tarball",
+    "fetchSpec": "https://www.atom.io/api/packages/element-helper/versions/0.5.4/tarball"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://www.atom.io/api/packages/element-helper/versions/0.5.4/tarball",
+  "_shasum": "ffe923941f82760354745c42a3239fac3eda4b1b",
+  "_spec": "https://www.atom.io/api/packages/element-helper/versions/0.5.4/tarball",
+  "_where": "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/apm-install-dir-119315-56094-1qvt72f.xp42",
+  "bugs": {
+    "url": "https://github.com/ElemeFE/element-helper/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "atom-space-pen-views": "^2.0.0",
+    "cheerio": "^1.0.0-rc.1",
+    "element-gh-pages": "^1.0.13",
+    "element-helper-json": "^1.0.0",
+    "follow-redirects": "^1.2.3",
+    "jquery": "^2",
+    "mkdirp": "^0.5.0",
+    "pretty": "^2.0.0",
+    "shelljs": "^0.7.8"
+  },
+  "deprecated": false,
+  "description": "Element-Helper is a Atom package and support snippets, autocomplete and document.",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "homepage": "https://github.com/ElemeFE/element-helper#readme",
+  "keywords": [],
+  "license": "MIT",
+  "main": "./lib/element-helper",
+  "name": "element-helper",
+  "providedServices": {
+    "autocomplete.provider": {
+      "versions": {
+        "2.0.0": "provide"
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElemeFE/element-helper.git"
+  },
+  "version": "0.5.4"
+}

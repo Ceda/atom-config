@@ -1,7 +1,7 @@
 'use babel';
 
 import { isFunction } from 'lodash';
-import React from 'react-for-atom';
+import React from 'react';
 import { compose, withHandlers } from 'recompose';
 
 function GutterResize({children, onMouseDown}) {
@@ -11,6 +11,7 @@ function GutterResize({children, onMouseDown}) {
       <div
         className="resize"
         onMouseDown={onMouseDown}
+        role="presentation"
       />
     </div>
   );
@@ -22,6 +23,6 @@ export default compose(
       return function (e) {
         return isFunction(onResizeStart) && onResizeStart(e.nativeEvent);
       };
-    }
+    },
   })
 )(GutterResize);

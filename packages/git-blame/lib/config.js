@@ -1,28 +1,44 @@
 'use babel';
 
 export default {
-  useCustomUrlTemplateIfStandardRemotesFail : {
+  useCustomUrlTemplateIfStandardRemotesFail: {
     type: 'boolean',
-    default: false
+    default: false,
   },
-  customCommitUrlTemplateString : {
+  customCommitUrlTemplateString: {
     type: 'string',
-    default: 'Example -> https://github.com/<%- project %>/<%- repo %>/commit/<%- revision %>'
+    default: 'Example -> https://github.com/<%- project %>/<%- repo %>/commit/<%- revision %>',
   },
-  columnWidth : {
+  columnWidth: {
     type: 'integer',
-    default: 210
+    default: 210,
   },
-  dateFormatString : {
+  dateFormatString: {
     type: 'string',
-    default: 'YYYY-MM-DD'
+    default: 'YYYY-MM-DD',
   },
-  ignoreWhiteSpaceDiffs : {
+  gitBinaryPath: {
+    type: 'string',
+    default: 'git',
+  },
+  ignoreWhiteSpaceDiffs: {
     type: 'boolean',
-    default: false
+    default: false,
   },
-  showOnlyLastNames : {
+  showFirstNames: {
     type: 'boolean',
-    default: false
+    default: true,
   },
-}
+  showLastNames: {
+    type: 'boolean',
+    default: true,
+  },
+  showHash: {
+    type: 'boolean',
+    default: true,
+  },
+  colorCommitAuthors: {
+    type: 'boolean',
+    default: false,
+  },
+};

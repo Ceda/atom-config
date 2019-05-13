@@ -1,10 +1,12 @@
 'use babel';
 
-import { map, find, debounce } from 'underscore';
+import { debounce, bindAll } from 'lodash';
 import { Range, CompositeDisposable } from 'atom';
-import { React, ReactDOM } from 'react-for-atom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 import Blamer from './Blamer';
+import GitCommander from './GitCommander';
 import RemoteRevision from './RemoteRevision';
 import repositoryForEditorPath from './repositoryForEditorPath';
 import BlameLine from '../components/BlameLine';
@@ -14,9 +16,13 @@ const GUTTER_ID = 'com.alexcorre.git-blame';
 const GUTTER_STYLE_ID = 'com.alexcorre.git-blame.style';
 const RESIZE_DEBOUNCE_MS = 5;
 
+const GIT_CONFIG_REPO_URL = 'atom-git-blame.repositoryUrlTemplate';
+
 export default class BlameGutter {
 
   constructor(editor) {
+    bindAll(this, ['onResizeStart']);
+
     this.editor = editor;
     this.isShown = false;
     this.lineDecorations = [];
@@ -81,7 +87,7 @@ export default class BlameGutter {
   gutter() {
     const { editor } = this;
     const gutter = editor.gutterWithName(GUTTER_ID);
-    return gutter ? gutter : editor.addGutter({
+    return gutter || editor.addGutter({
       name: GUTTER_ID,
       visible: false,
       priority: 100,
@@ -89,43 +95,58 @@ export default class BlameGutter {
   }
 
   updateLineMarkers(filePath) {
-    const showOnlyLastNames = atom.config.get('git-blame.showOnlyLastNames');
+    const showFirstNames = atom.config.get('git-blame.showFirstNames');
+    const showLastNames = atom.config.get('git-blame.showLastNames');
+    const showHash = atom.config.get('git-blame.showHash');
+    const colorCommitAuthors = atom.config.get('git-blame.colorCommitAuthors');
     return repositoryForEditorPath(filePath)
-      .then(repo => {
+      .then((repo) => {
         const blamer = new Blamer(repo);
-        return new Promise((resolve, reject) => {
+        const gitCmd = new GitCommander(repo.getWorkingDirectory());
+        const blamePromise = new Promise((resolve, reject) => {
           blamer.blame(filePath, function (err, data) {
             return err ? reject(err) : resolve([repo, data]);
           });
         });
+        const gitConfigPromise = new Promise((resolve, reject) => {
+          gitCmd.config(GIT_CONFIG_REPO_URL, function (err, data) {
+            return err ? reject(err) : resolve(data);
+          });
+        });
+        return Promise.all([blamePromise, gitConfigPromise]);
       })
-      .then(([repo, blameData]) => {
-        const remoteRevision = new RemoteRevision(repo.getOriginURL(filePath));
+      .then(([[repo, blameData], gitConfigData]) => {
+        const remoteRevision = new RemoteRevision(repo.getOriginURL(filePath), gitConfigData);
         const hasUrlTemplate = !!remoteRevision.getTemplate();
         let lastHash = null;
         let className = null;
 
-        blameData.forEach(lineData => {
+        blameData.forEach((lineData) => {
           const { lineNumber, hash, noCommit } = lineData;
           if (noCommit) {
             return;
           }
 
           // set alternating background className
-          if (lineData.hash !== lastHash) {
+          if (hash !== lastHash) {
             className = (className === 'lighter') ? 'darker' : 'lighter';
           }
-          lastHash = lineData.hash;
+          lastHash = hash;
 
           // generate a link to the commit
           const viewCommitUrl = hasUrlTemplate ? remoteRevision.url(lineData.hash) : '#';
+          const copyHashOnClick = !hasUrlTemplate;
 
           // construct props for BlameLine component
           const lineProps = {
             ...lineData,
             className,
             viewCommitUrl,
-            showOnlyLastNames,
+            showFirstNames,
+            showLastNames,
+            showHash,
+            colorCommitAuthors,
+            copyHashOnClick,
           };
 
           // adding one marker to the first line
@@ -146,7 +167,8 @@ export default class BlameGutter {
 
   removeLineMarkers() {
     this.disposables.dispose();
-    this.lineDecorations.forEach(decoration => {
+    this.disposables = new CompositeDisposable();
+    this.lineDecorations.forEach((decoration) => {
       decoration.destroy();
     });
   }
@@ -156,7 +178,7 @@ export default class BlameGutter {
 
     // Use React to render the BlameLine component
     ReactDOM.render(
-      <GutterResize onResizeStart={this.onResizeStart.bind(this)}>
+      <GutterResize onResizeStart={this.onResizeStart}>
         <BlameLine {...lineProps} />
       </GutterResize>,
       div
@@ -178,26 +200,29 @@ export default class BlameGutter {
     this.bindResizeEvents();
   }
 
-  onResizeEnd(e) {
+  onResizeEnd() {
     this.unbindResizeEvents();
     this.isResizing = false;
     this.resizeStartX = null;
   }
 
   onResizeMove(e) {
+    if (!this.resizeStartX) {
+      return;
+    }
     const delta = e.pageX - this.resizeStartX;
     this.updateGutterWidth(this.resizeStartWidth + delta);
   }
 
   bindResizeEvents() {
-    if (!this.eventListeners['mouseup']) {
+    if (!this.eventListeners.mouseup) {
       const mouseupHandler = this.onResizeEnd.bind(this);
-      this.eventListeners['mouseup'] = mouseupHandler;
+      this.eventListeners.mouseup = mouseupHandler;
       document.addEventListener('mouseup', mouseupHandler);
     }
-    if (!this.eventListeners['mousemove']) {
+    if (!this.eventListeners.mousemove) {
       const mouseMoveHandler = debounce(this.onResizeMove.bind(this), RESIZE_DEBOUNCE_MS);
-      this.eventListeners['mousemove'] = mouseMoveHandler;
+      this.eventListeners.mousemove = mouseMoveHandler;
       document.addEventListener('mousemove', mouseMoveHandler);
     }
   }

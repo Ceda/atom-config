@@ -1,0 +1,5 @@
+{
+  "atom-workspace": {
+    "ctrl-cmd-z": "element-helper:search-under-cursor"
+  }
+}

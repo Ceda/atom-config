@@ -10,10 +10,14 @@ export default {
     require('atom-package-deps').install('linter-ruby');
 
     this.subscriptions = new CompositeDisposable();
-    this.subscriptions.add(atom.config.observe('linter-ruby.rubyExecutablePath',
-      (value) => { this.executablePath = value; }));
-    this.subscriptions.add(atom.config.observe('linter-ruby.ignoredExtensions',
-      (value) => { this.ignoredExtensions = value; }));
+    this.subscriptions.add(
+      atom.config.observe('linter-ruby.rubyExecutablePath', (value) => {
+        this.executablePath = value;
+      }),
+      atom.config.observe('linter-ruby.ignoredExtensions', (value) => {
+        this.ignoredExtensions = value;
+      }),
+    );
   },
 
   deactivate() {
@@ -26,9 +30,13 @@ export default {
       name: 'Ruby',
       grammarScopes: ['source.ruby', 'source.ruby.rails', 'source.ruby.rspec'],
       scope: 'file',
-      lintOnFly: true,
+      lintsOnChange: true,
       lint: async (textEditor) => {
         const filePath = textEditor.getPath();
+        if (!filePath) {
+          // We somehow got called without a file path
+          return null;
+        }
         const fileText = textEditor.getText();
         const fileExtension = extname(filePath).substr(1);
 
@@ -36,7 +44,13 @@ export default {
           return [];
         }
 
-        const execArgs = ['-wc', '-Eutf-8'];
+        const execArgs = [
+          '-c', // Check syntax only, no execution
+          '-w', // Turns on warnings
+          // Set the encoding to UTF-8
+          '--external-encoding=utf-8',
+          '--internal-encoding=utf-8',
+        ];
         const execOpts = {
           stdin: fileText,
           stream: 'stderr',
@@ -51,12 +65,14 @@ export default {
         let match = regex.exec(output);
         while (match !== null) {
           const msgLine = Number.parseInt(match[1] - 1, 10);
-          const type = match[2] === 'warning' ? 'Warning' : 'Error';
+          const severity = match[2] === 'warning' ? 'warning' : 'error';
           toReturn.push({
-            range: helpers.generateRange(textEditor, msgLine),
-            type,
-            text: match[3],
-            filePath,
+            severity,
+            location: {
+              file: filePath,
+              position: helpers.generateRange(textEditor, msgLine),
+            },
+            excerpt: match[3],
           });
           match = regex.exec(output);
         }

@@ -3,38 +3,54 @@
 // See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
 // for a full listing of what's available.
 @import "ui-variables";
-@import "../node_modules/split-diff/styles/split-diff.less";
+@import "syntax-variables";
 
 .git-time-machine {
   .timeplot {
+    overflow: hidden;
+    width: 100%;
     .placeholder {
       height: 100px;
       text-align: center;
       vertical-align: middle;
     }
   }
+  .gtm-zoom-selector {
+    position: absolute;
+    right: 10px;
+    bottom: 2px; 
+    
+    select {
+      margin-left: 5px;
+    }     
+  }
   .close-handle {
     position: absolute;
-    top: 3px;
-    right: 4px;
-    border: 1px solid #BBB;
-    display: inline-block;
-    border-radius: 14px;
-    /* background-color: red; */
-    font-size: 13px;
-    margin-right: 12px;
-    margin-top: 4px;
+    top: 7px;
+    right: 16px;
+    width: 16px;
+    height: 16px;
     cursor: pointer;
     z-index: 4;
+    color: @text-color-subtle;
+    
+    &:hover {
+      color: @text-color-highlight;
+    }
   }
-  .close-handle:hover {
-    background-color: red;
-  }
-  
+
   .stats {
-    display: inline-block;
-    float: left;
-    margin-top: 3px;
+    margin-top: 5px;
+    /* margin-left: 5px; */
+    margin-bottom: 5px;
+    text-align: center;
+    font-size: 11px;  
+    
+    .gtm-zoom {
+      float: right;
+      margin-right: 30px;
+      margin-top: -6px;
+    }
   }
 
   .axis path,
@@ -60,13 +76,47 @@
       opacity: .3;
   }
 
-  .hover-marker {
+  .rev-marker(@backgroundColor) {
+    background-color: @backgroundColor;
     position: absolute;
     height: ~"calc(100% - 25px)";
     width: 5px;
     top: 0px;
-    right: 10px;
-    background-color: @pane-item-border-color;
+  }
+  .hover-marker {
+    .rev-marker(@pane-item-border-color);    
+  }
+
+  .left-rev-marker {
+    .rev-marker(fade(@syntax-color-removed, 80%););
+  }
+
+  .right-rev-marker {
+    .rev-marker(fade(@syntax-color-added, 80%););
+  }
+  
+  .gtm-hz-scroller {
+    width: 100%;
+    overflow: scroll;
+    position: relative;
+  }  
+  
+  .gtm-touch-area {
+    position: absolute;
+    top: 0px;
+    width: 0px; 
+    height: 0px; 
+    z-index: 1;
+  }
+  .gtm-touch-area.gtm-right {
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 20px solid fade(@pane-item-border-color, 90%);
+  }
+  .gtm-touch-area.gtm-left {
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent; 
+    border-right: 20px solid fade(@pane-item-border-color, 90%);       
   }
 
 }
@@ -79,7 +129,7 @@
     position: absolute;
     z-index: 10;
     width: 400px;
-    max-height: 300px;
+    max-height: 320px;
     overflow-y: auto;
     border: solid 4px @pane-item-border-color;
   }
@@ -87,6 +137,18 @@
   .controls {
     float: right;
   }
+  
+  .rev-scroller {
+    max-height: 240px;
+    overflow: scroll;
+    border-bottom: solid 1px @pane-item-border-color;
+  }
+  
+  .helper-text {
+    padding: 10px;
+  }
+  
+  
   ul {
     list-style-type: none;
   }
@@ -118,4 +180,40 @@
       }
     }
   }
+} // .git-timemachine-popup
+
+
+.select-list.popover-list.git-timemachine-revselector-popup {
+  position: absolute;
+  z-index: 10;
+  width: 350px;
+  background: @base-background-color;
+  color: @text-color;
+
+  .header {
+    width: 100%;
+    overflow: hidden;
+    > div {
+      display: inline-block;
+      width: 30%;
+      margin-right: 10px;
+    }
+  }
 }
+
+// this element is located appended inside the split diff UI control panel
+.timemachine-rev-select {
+  display: inline-block;
+  // keeps the split-diff center buttons in the center when the rev label has diff lengths left and right
+  min-width: 200px;
+  
+  span {
+    margin: 0px 3px;
+  }
+  
+}
+
+.split-diff-ui .mid {
+  min-width: 600px;
+}
+

@@ -17,11 +17,20 @@
       "git-time-machine"
       "intentions"
       "language-haml"
-      "language-vue"
-      "language-vue-component"
       "merge-conflicts"
       "rails-partials"
-      "vue-format"
+      "random"
+      "jshint"
+      "ide-vue"
+      "github"
+      "pigments"
+      "file-icons"
+      "hyperclick"
+      "color-picker"
+      "busy-signal"
+      "js-hyperclick"
+      "background-tips"
+      "language-vue-component"
     ]
     telemetryConsent: "no"
     themes: [
@@ -31,11 +40,15 @@
   editor:
     autoIndentOnPaste: false
     fontFamily: "Monaco"
+    fontSize: 12
     invisibles: {}
     openEmptyEditorOnStart: false
+    showInvisibles: true
     useShadowDOM: true
   "exception-reporting":
     userId: "1dfd30ba-d42c-404f-7651-0e7f151f914f"
+  "file-types":
+    "*.rb": "source.ruby.rails"
   "fuzzy-finder":
     searchAllPanes: true
     useAlternateScoring: true
@@ -43,13 +56,30 @@
     columnWidth: 355
   "highlight-selected": {}
   linter: {}
+  "linter-eslint":
+    autofix:
+      fixOnSave: true
+    scopes: [
+      "source.js"
+      "source.jsx"
+      "source.js.jsx"
+      "source.flow"
+      "source.babel"
+      "source.js-semantic"
+      "text.html.vue"
+      "source.vue"
+    ]
   "linter-ui-default":
     panelHeight: 69
   minimap:
     displayCodeHighlights: false
   "one-dark-ui": {}
-  pigments:
-    markerType: "dot"
+  pigments: {}
+  "prettier-atom":
+    formatOnSaveOptions:
+      enabled: true
+      showInStatusBar: true
+    useEslint: true
   "ruby-block":
     highlightLineNumber: true
   "split-diff":
@@ -60,6 +90,7 @@
     syncHorizontalScroll: true
   "tree-view":
     hideIgnoredNames: true
+    hideVcsIgnoredFiles: true
   welcome:
     showOnStartup: false
   whitespace:
@@ -71,3 +102,5 @@
 ".slim.text":
   whitespace:
     removeTrailingWhitespace: true
+"linter-eslint":
+  fixOnSave: true

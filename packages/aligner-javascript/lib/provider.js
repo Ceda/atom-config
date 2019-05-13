@@ -1,5 +1,10 @@
 module.exports = {
-  selector: ['.source.js', '.source.js.jsx'],
+  selector: [
+    '.source.js',
+    '.source.js.jsx',
+    '.source.js.embedded.html',
+    '.source.json'
+  ],
   id: 'aligner-javascript', // package name
   config: {
     "=-alignment": {
