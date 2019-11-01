@@ -1,0 +1,73 @@
+{
+  "_from": "https://www.atom.io/api/packages/fixmyjs/versions/1.4.1/tarball",
+  "_id": "fixmyjs@1.4.1",
+  "_inBundle": false,
+  "_integrity": "sha512-sH6G28NLp+lTdD/zC1leyuroeIEfiHNZdofuWgkd/k0DKMll4B/mXUb06uakGSinQnWa0njTScbLF2pIpMKs+g==",
+  "_location": "/fixmyjs",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "remote",
+    "raw": "https://www.atom.io/api/packages/fixmyjs/versions/1.4.1/tarball",
+    "rawSpec": "https://www.atom.io/api/packages/fixmyjs/versions/1.4.1/tarball",
+    "saveSpec": "https://www.atom.io/api/packages/fixmyjs/versions/1.4.1/tarball",
+    "fetchSpec": "https://www.atom.io/api/packages/fixmyjs/versions/1.4.1/tarball"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/",
+    "/fixmyjs"
+  ],
+  "_resolved": "https://www.atom.io/api/packages/fixmyjs/versions/1.4.1/tarball",
+  "_shasum": "01d2127885d697f3ece3d8b394e3eebafe022aea",
+  "_spec": "https://www.atom.io/api/packages/fixmyjs/versions/1.4.1/tarball",
+  "_where": "/private/var/folders/t2/t1s7rrg11h3dpw4w880hts580000gn/T/apm-install-dir-119512-29364-1rsux75.qfi2",
+  "activationCommands": {
+    "atom-workspace": "FixMyJS"
+  },
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com"
+  },
+  "bugs": {
+    "url": "https://github.com/sindresorhus/atom-fixmyjs/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "fixmyjs": "^1.0.2",
+    "jshint": "^2.5.6"
+  },
+  "deprecated": false,
+  "description": "Automagically fix JSHint lint warnings",
+  "devDependencies": {
+    "xo": "*"
+  },
+  "engines": {
+    "atom": ">=1.13.0"
+  },
+  "homepage": "https://github.com/sindresorhus/atom-fixmyjs#readme",
+  "keywords": [
+    "javascript",
+    "format",
+    "beautify",
+    "prettify",
+    "jshint"
+  ],
+  "license": "MIT",
+  "name": "fixmyjs",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sindresorhus/atom-fixmyjs.git"
+  },
+  "scripts": {
+    "test": "xo"
+  },
+  "version": "1.4.1",
+  "xo": {
+    "esnext": true,
+    "globals": [
+      "atom"
+    ]
+  }
+}

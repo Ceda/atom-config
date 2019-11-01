@@ -1,0 +1,21 @@
+##
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1	localhost
+255.255.255.255	broadcasthost
+::1             localhost
+# 81.0.240.108    fakturaonline.cz www.fakturaonline.cz www.fakturaonline.sk fakturaonline.sk
+#127.0.0.1  dev.fakturaonline.sk dev.fakturaonline.cz dev.fakturaonline.pl dev.invoiceonline.com
+#54.75.238.140  dev.fakturaonline.sk dev.fakturaonline.cz dev.fakturaonline.pl dev.invoiceonline.com
+127.0.0.1	localhost.fakturaonline.rs localhost.invoiceonline.com localhost.fakturaonline.pl localhost.fakturaonline.sk localhost.fakturaonline.cz localhost.invoiceonline.com
+34.251.146.65 vue.fakturaonline.cz
+146.185.161.52 git.machovojezero-ubytovani.info
+127.0.0.1 cdn.localhost
+80.79.29.156 images.chillipikanterie.cz
+172.31.47.180 development.tx.cz
+#185.64.219.37 www.nabytek-kabrna.cz
+
+81.0.240.98 translations.blueberry.io
